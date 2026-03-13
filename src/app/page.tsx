@@ -30,14 +30,14 @@ export default function Home() {
           className="text-5xl sm:text-7xl font-semibold tracking-tight text-zinc-50 mb-6 drop-shadow-sm font-sans"
         >
           Analyze any repository <br />
-          <span className="text-zinc-500">in milliseconds.</span>
+          <span className="text-zinc-400">in milliseconds.</span>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-lg text-zinc-400 max-w-2xl mx-auto mb-12 font-medium"
+          className="text-lg text-zinc-300 max-w-2xl mx-auto mb-12 font-medium"
         >
           Enter a GitHub URL. ArchScope intelligently scans dependencies, files, and infrastructure to map out the entire architectural stack instantly.
         </motion.p>

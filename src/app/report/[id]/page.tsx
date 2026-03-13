@@ -48,26 +48,26 @@ export default function ReportPage() {
     }, [id]);
 
     return (
-        <div className="min-h-screen bg-zinc-950 p-6 md:p-12 selection:bg-indigo-500/30">
-            <div className="max-w-4xl mx-auto">
+        <div className="flex-1 bg-black p-6 md:p-12 pb-24 selection:bg-white/20">
+            <div className="max-w-5xl mx-auto">
                 <button
                     onClick={() => router.push("/")}
-                    className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mb-12"
+                    className="flex items-center gap-2 text-zinc-500 hover:text-white transition-colors mb-8 font-medium text-sm group"
                 >
-                    <ArrowLeft className="w-5 h-5" /> Back to Search
+                    <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to Search
                 </button>
 
                 {loading && (
-                    <div className="flex flex-col items-center justify-center mt-32 space-y-6 text-zinc-400">
-                        <Loader2 className="w-12 h-12 text-indigo-500 animate-spin" />
-                        <p className="animate-pulse text-lg tracking-wide">Analyzing Repository Architecture...</p>
+                    <div className="flex flex-col items-center justify-center mt-32 space-y-6">
+                        <Loader2 className="w-8 h-8 text-white animate-spin" />
+                        <p className="animate-pulse text-sm font-mono tracking-wide text-zinc-500 uppercase">Mapping Architecture...</p>
                     </div>
                 )}
 
                 {error && (
-                    <div className="p-6 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl flex flex-col items-center">
-                        <h2 className="text-xl font-bold mb-2">Analysis Failed</h2>
-                        <p>{error}</p>
+                    <div className="p-8 bg-red-500/10 border border-red-500/20 text-red-500 rounded-3xl flex flex-col items-center max-w-xl mx-auto mt-20">
+                        <h2 className="text-xl font-semibold mb-3 text-red-400">Analysis Failed</h2>
+                        <p className="text-sm text-red-300 text-center">{error}</p>
                     </div>
                 )}
 
