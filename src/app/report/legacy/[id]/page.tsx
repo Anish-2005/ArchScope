@@ -6,7 +6,7 @@ import { StackReport } from "@/lib/types";
 import { ReportCard } from "@/components/ReportCard";
 import { ArrowLeft, Loader2 } from "lucide-react";
 
-export default function ReportPage() {
+export default function LegacyReportPage() {
     const { id } = useParams();
     const router = useRouter();
 
@@ -17,11 +17,20 @@ export default function ReportPage() {
     useEffect(() => {
         if (!id) return;
 
-        let decodedUrl = "";
+        // Support both legacy base64 `id` formats
+        let repoUrl = "";
         try {
-            decodedUrl = atob(decodeURIComponent(id as string));
+            if (id && id.includes('%3D')) {
+                repoUrl = atob(decodeURIComponent(id as string));
+            } else if (id && /^[A-Za-z0-9+/=]+$/.test(id)) {
+                repoUrl = atob(id as string);
+            }
         } catch {
-            setError("Invalid report ID");
+            // ignore
+        }
+
+        if (!repoUrl) {
+            setError("Invalid legacy report ID");
             setLoading(false);
             return;
         }
@@ -31,7 +40,7 @@ export default function ReportPage() {
                 const res = await fetch("/api/scan", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ repoUrl: decodedUrl }),
+                    body: JSON.stringify({ repoUrl }),
                 });
                 const result = await res.json();
 

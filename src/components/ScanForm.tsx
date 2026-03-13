@@ -22,9 +22,15 @@ export const ScanForm = () => {
             return;
         }
 
+        // If user typed owner/repo, make it a GitHub URL
         if (!input.includes('github.com/') && input.includes('/')) {
             input = `https://github.com/${input.replace(/^\/+/, '')}`;
         }
+
+        // Try to extract owner and repo to use a clean path: /report/owner/repo
+        const match = input.match(/github\.com\/(?<owner>[^\/\s]+)\/(?<repo>[^\/\s]+)(?:\.git)?/i);
+        const owner = match?.groups?.owner;
+        const repo = match?.groups?.repo;
 
         // Basic validation
         if (!input.includes('github.com/')) {
@@ -38,7 +44,7 @@ export const ScanForm = () => {
             const res = await fetch('/api/scan', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ repoUrl: url }),
+                body: JSON.stringify({ repoUrl: input }),
             });
 
             const data = await res.json();
@@ -47,8 +53,13 @@ export const ScanForm = () => {
                 throw new Error(data.error || 'Failed to scan repository.');
             }
 
-            const encodedId = encodeURIComponent(btoa(input));
-            router.push(`/report/${encodedId}`);
+            if (owner && repo) {
+                // Use readable path
+                router.push(`/report/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`);
+            } else {
+                const encodedId = encodeURIComponent(btoa(input));
+                router.push(`/report/legacy/${encodedId}`);
+            }
 
         } catch (err: any) {
             setError(err.message);
