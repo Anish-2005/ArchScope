@@ -1,6 +1,7 @@
 "use client";
 
 import { ScanForm } from '@/components/ScanForm';
+import GettingStarted from '@/components/GettingStarted';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
 import { Layers, Zap, ShieldCheck, Github } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -42,6 +43,7 @@ export default function Home() {
           Enter a GitHub URL. ArchScope intelligently scans dependencies, files, and infrastructure to map out the entire architectural stack instantly.
         </motion.p>
 
+        <GettingStarted />
         <ScanForm />
 
         <div className="mt-24 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-4xl mx-auto text-left">

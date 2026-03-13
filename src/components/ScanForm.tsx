@@ -15,8 +15,19 @@ export const ScanForm = () => {
         e.preventDefault();
         setError(null);
 
-        // Validate GitHub URL format roughly
-        if (!url.includes('github.com/')) {
+        // Normalize input: allow owner/repo shorthand
+        let input = url.trim();
+        if (!input) {
+            setError('Please enter a GitHub repository URL or owner/repo.');
+            return;
+        }
+
+        if (!input.includes('github.com/') && input.includes('/')) {
+            input = `https://github.com/${input.replace(/^\/+/, '')}`;
+        }
+
+        // Basic validation
+        if (!input.includes('github.com/')) {
             setError('Please enter a valid GitHub repository URL.');
             return;
         }
@@ -36,7 +47,7 @@ export const ScanForm = () => {
                 throw new Error(data.error || 'Failed to scan repository.');
             }
 
-            const encodedId = encodeURIComponent(btoa(url));
+            const encodedId = encodeURIComponent(btoa(input));
             router.push(`/report/${encodedId}`);
 
         } catch (err: any) {
@@ -87,6 +98,8 @@ export const ScanForm = () => {
                 <motion.p
                     initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                     className="text-red-400 mt-4 text-center text-sm font-medium"
+                    role="alert"
+                    aria-live="assertive"
                 >
                     {error}
                 </motion.p>
@@ -94,9 +107,9 @@ export const ScanForm = () => {
 
             <div className="mt-6 flex justify-center items-center gap-3 text-sm text-zinc-500 font-medium">
                 <span className="text-zinc-600 hidden sm:inline-block">Try these:</span>
-                <button onClick={() => setUrl('https://github.com/vercel/next.js')} className="hover:text-white transition-colors bg-white/5 px-3 py-1 rounded-md border border-white/5 hover:border-white/10 font-mono text-xs shadow-sm">vercel/next.js</button>
-                <button onClick={() => setUrl('https://github.com/facebook/react')} className="hover:text-white transition-colors bg-white/5 px-3 py-1 rounded-md border border-white/5 hover:border-white/10 font-mono text-xs shadow-sm">facebook/react</button>
-                <button onClick={() => setUrl('https://github.com/tailwindlabs/tailwindcss')} className="hover:text-white transition-colors bg-white/5 px-3 py-1 rounded-md border border-white/5 hover:border-white/10 font-mono text-xs shadow-sm hidden sm:inline-block">tailwindlabs/tailwindcss</button>
+                <button onClick={() => setUrl('https://github.com/vercel/next.js')} aria-label="Use vercel/next.js sample" className="hover:text-white transition-colors bg-white/5 px-3 py-1 rounded-md border border-white/5 hover:border-white/10 font-mono text-xs shadow-sm">vercel/next.js</button>
+                <button onClick={() => setUrl('https://github.com/facebook/react')} aria-label="Use facebook/react sample" className="hover:text-white transition-colors bg-white/5 px-3 py-1 rounded-md border border-white/5 hover:border-white/10 font-mono text-xs shadow-sm">facebook/react</button>
+                <button onClick={() => setUrl('https://github.com/tailwindlabs/tailwindcss')} aria-label="Use tailwindlabs/tailwindcss sample" className="hover:text-white transition-colors bg-white/5 px-3 py-1 rounded-md border border-white/5 hover:border-white/10 font-mono text-xs shadow-sm hidden sm:inline-block">tailwindlabs/tailwindcss</button>
             </div>
         </motion.div>
     );
