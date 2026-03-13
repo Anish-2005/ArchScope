@@ -2,68 +2,67 @@
 
 import { ScanForm } from '@/components/ScanForm';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
-import { Layers, Zap, ShieldCheck } from 'lucide-react';
+import { Layers, Zap, ShieldCheck, Github } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Home() {
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center p-6 sm:p-24 overflow-hidden">
+    <div className="relative flex flex-1 flex-col items-center justify-center p-6 sm:p-24 overflow-hidden bg-black selection:bg-white/20">
       <AnimatedBackground />
 
-      <div className="z-10 w-full max-w-5xl flex flex-col items-center text-center mt-[-10vh]">
+      <div className="z-10 w-full max-w-4xl flex flex-col text-center mt-[-10vh]">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-8 p-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md inline-flex items-center gap-3"
+          className="mb-8 mx-auto"
         >
-          <div className="bg-indigo-500 text-white p-2 rounded-xl">
-            <Layers className="w-5 h-5" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm text-zinc-300 backdrop-blur-md transition-colors hover:bg-white/10">
+            <span className="flex h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]"></span>
+            ArchScope Engine v2.0
           </div>
-          <span className="pr-3 text-sm font-medium tracking-wide text-zinc-300">
-            ArchScope Engine v1.0
-          </span>
         </motion.div>
 
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-5xl sm:text-7xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-zinc-500 mb-6 drop-shadow-sm"
+          className="text-5xl sm:text-7xl font-semibold tracking-tight text-zinc-50 mb-6 drop-shadow-sm font-sans"
         >
-          Instant Tech Stack Analysis.
+          Analyze any repository <br />
+          <span className="text-zinc-500">in milliseconds.</span>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-lg sm:text-xl text-zinc-400 max-w-2xl mb-12 leading-relaxed"
+          className="text-lg text-zinc-400 max-w-2xl mx-auto mb-12 font-medium"
         >
-          Paste any public GitHub repository URL and instantly uncover its technology stack, frameworks, infrastructure, and architectural complexity.
+          Enter a GitHub URL. ArchScope intelligently scans dependencies, files, and infrastructure to map out the entire architectural stack instantly.
         </motion.p>
 
         <ScanForm />
 
-        <div className="mt-24 grid grid-cols-1 sm:grid-cols-3 gap-8 w-full max-w-4xl text-left border-t border-white/10 pt-16">
+        <div className="mt-24 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-4xl mx-auto text-left">
           <FeatureCard
-            icon={<Zap className="w-6 h-6 text-yellow-400" />}
-            title="Lightning Fast"
-            desc="Powered by Edge caching, delivering stack reports in under a second."
+            icon={<Zap className="w-5 h-5 text-white" />}
+            title="Edge Caching"
+            desc="Globally distributed cache powered by Upstash delivers reports instantly without rate limits."
           />
           <FeatureCard
-            icon={<Layers className="w-6 h-6 text-indigo-400" />}
-            title="Deep Detection"
-            desc="Analyzes package files, dependencies, and repo structure dynamically."
+            icon={<Layers className="w-5 h-5 text-white" />}
+            title="Heuristic Engine"
+            desc="Matches hundreds of specific configurations and dependencies across languages."
           />
           <FeatureCard
-            icon={<ShieldCheck className="w-6 h-6 text-green-400" />}
-            title="Complexity Scoring"
-            desc="Objectively measures architectural footprint to gauge maintenance effort."
+            icon={<ShieldCheck className="w-5 h-5 text-white" />}
+            title="Complexity Score"
+            desc="Proprietary index to gauge the infrastructural and framework maintenance overhead."
           />
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 
@@ -73,13 +72,13 @@ function FeatureCard({ icon, title, desc }: { icon: React.ReactNode, title: stri
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="p-6 rounded-3xl bg-white/5 border border-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors"
+      className="group relative p-6 rounded-2xl bg-zinc-900/40 border border-white/5 backdrop-blur-sm transition-all hover:bg-zinc-900/80 hover:border-white/10"
     >
-      <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center mb-6 shadow-inner ring-1 ring-white/10">
+      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-white mb-4 ring-1 ring-white/10 group-hover:bg-white/20 transition-colors">
         {icon}
       </div>
-      <h3 className="text-xl font-semibold text-zinc-100 mb-2">{title}</h3>
-      <p className="text-zinc-500 leading-relaxed">{desc}</p>
+      <h3 className="text-sm font-semibold text-zinc-100 mb-2">{title}</h3>
+      <p className="text-sm text-zinc-400 leading-relaxed font-medium">{desc}</p>
     </motion.div>
   );
 }
