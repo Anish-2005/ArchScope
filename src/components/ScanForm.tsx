@@ -28,7 +28,7 @@ export const ScanForm = () => {
         }
 
         // Try to extract owner and repo to use a clean path: /report/owner/repo
-        const match = input.match(/github\.com\/([^\/\s]+)\/([^\/\s]+)(?:\.git)?/i);
+        const match = input.match(/github\.com\/([^\/\s]+)\/([^\/\s]+?)(?:\.git)?(?:[\/\?#]|$)/i);
         const owner = match?.[1];
         const repo = match?.[2];
 

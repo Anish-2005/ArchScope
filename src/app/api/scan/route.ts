@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { parseGitHubUrl, fetchGitHubData } from '@/lib/github';
+import { parseGitHubUrl, fetchGitHubData, GitHubFetchError } from '@/lib/github';
 import { detectStack } from '@/lib/detector';
 import { getCache, setCache } from '@/lib/redis';
 import crypto from 'crypto';
@@ -33,9 +33,14 @@ export async function POST(req: Request) {
         }
 
         // 2. Fetch from GitHub
-        const repoData = await fetchGitHubData(parsed.owner, parsed.repo);
-        if (!repoData) {
-            return NextResponse.json({ error: 'Failed to fetch GitHub repository data. Ensure it is public.' }, { status: 404 });
+        let repoData;
+        try {
+            repoData = await fetchGitHubData(parsed.owner, parsed.repo);
+        } catch (e) {
+            if (e instanceof GitHubFetchError) {
+                return NextResponse.json({ error: e.message }, { status: e.status });
+            }
+            throw e;
         }
 
         // 3. Detect stack

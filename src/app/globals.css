@@ -1,18 +1,20 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #06070a;
-  --color-foreground: #f6f7fb;
+  --color-background: #0b1118;
+  --color-foreground: #f4f7fb;
 }
 
 @layer base {
   :root {
     --surface-1: rgba(255, 255, 255, 0.03);
-    --surface-2: rgba(255, 255, 255, 0.06);
-    --line-soft: rgba(255, 255, 255, 0.08);
+    --surface-2: rgba(255, 255, 255, 0.065);
+    --line-soft: rgba(255, 255, 255, 0.1);
+    --brand-ice: #7dd3fc;
     --brand-cyan: #22d3ee;
-    --brand-emerald: #34d399;
+    --brand-teal: #14b8a6;
     --brand-amber: #f59e0b;
+    --brand-coral: #fb7185;
   }
 
   * {
@@ -20,21 +22,51 @@
   }
 
   body {
-    background-color: var(--color-background);
+    background:
+      radial-gradient(1300px 660px at 6% -10%, rgba(34, 211, 238, 0.18), transparent 58%),
+      radial-gradient(980px 620px at 92% 6%, rgba(251, 113, 133, 0.14), transparent 60%),
+      linear-gradient(180deg, #121b27 0%, #0d1621 35%, #0b1118 100%);
     color: var(--color-foreground);
+    font-family: var(--font-sans), sans-serif;
     @apply antialiased;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.2;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.15' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='0.25'/%3E%3C/svg%3E");
+    mix-blend-mode: soft-light;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    background: radial-gradient(ellipse at center, transparent 42%, rgba(2, 5, 10, 0.34) 100%);
   }
 }
 
 @layer utilities {
   .glass-panel {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
-    backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+      linear-gradient(160deg, rgba(125, 211, 252, 0.13), transparent 35%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.035) 100%);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      0 22px 55px rgba(0, 0, 0, 0.42);
   }
 
   .hero-title {
     text-wrap: balance;
+    letter-spacing: -0.03em;
   }
 
   .soft-grid {
@@ -45,7 +77,26 @@
   }
 
   .kpi-card {
-    background: radial-gradient(circle at top right, rgba(34, 211, 238, 0.08), transparent 40%), rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.09);
+    background:
+      radial-gradient(circle at top right, rgba(34, 211, 238, 0.22), transparent 44%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.03));
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
+
+  .section-shell {
+    background:
+      linear-gradient(120deg, rgba(20, 184, 166, 0.12), transparent 36%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 16px 42px rgba(0, 0, 0, 0.35);
+  }
+
+  .eyebrow-pill {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      0 8px 24px rgba(0, 0, 0, 0.3);
   }
 }

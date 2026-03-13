@@ -3,12 +3,12 @@
 import { ScanForm } from '@/components/ScanForm';
 import GettingStarted from '@/components/GettingStarted';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
-import { Layers, Zap, ShieldCheck, Gauge, Workflow, Shield, Timer } from 'lucide-react';
+import { Layers, Zap, Gauge, Workflow, Shield, Timer } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Home() {
   return (
-    <div className="relative flex flex-1 flex-col items-center justify-start px-6 py-10 sm:px-10 sm:py-16 overflow-hidden bg-black selection:bg-white/20">
+    <div className="relative flex flex-1 flex-col items-center justify-start px-6 py-10 sm:px-10 sm:py-16 overflow-hidden selection:bg-cyan-300/30">
       <AnimatedBackground />
 
       <div className="z-10 w-full max-w-6xl flex flex-col text-center">
@@ -18,8 +18,8 @@ export default function Home() {
           transition={{ duration: 0.5 }}
           className="mb-7 mx-auto"
         >
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm text-zinc-300 backdrop-blur-md transition-colors hover:bg-white/10">
-            <span className="flex h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)]"></span>
+          <div className="eyebrow-pill inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm text-zinc-200 backdrop-blur-md transition-colors hover:bg-white/10">
+            <span className="flex h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(125,211,252,0.95)]"></span>
             Trusted by platform and architecture teams
           </div>
         </motion.div>
@@ -28,11 +28,11 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="hero-title text-4xl sm:text-6xl lg:text-7xl font-semibold tracking-tight text-zinc-50 mb-6 drop-shadow-sm font-sans"
+          className="hero-title text-4xl sm:text-6xl lg:text-7xl font-semibold text-zinc-50 mb-6 drop-shadow-[0_10px_35px_rgba(0,0,0,0.55)]"
         >
-          Engineering intelligence for
+          Engineering intelligence
           <br />
-          <span className="text-zinc-300">organizational architecture decisions.</span>
+          <span className="bg-gradient-to-r from-cyan-100 via-zinc-100 to-rose-100 bg-clip-text text-transparent">for organizational architecture decisions.</span>
         </motion.h1>
 
         <motion.p
@@ -56,7 +56,7 @@ export default function Home() {
           <StatChip icon={<Shield className="w-4 h-4 text-zinc-200" />} label="Use Case" value="Org Governance" />
         </div>
 
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl mx-auto text-left">
+        <div className="section-shell mt-6 rounded-3xl p-4 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 w-full max-w-6xl mx-auto text-left">
           <FeatureCard
             icon={<Zap className="w-5 h-5 text-white" />}
             title="Executive-Ready Summaries"
@@ -80,7 +80,7 @@ export default function Home() {
 
 function StatChip({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="kpi-card rounded-2xl p-4">
+    <div className="kpi-card rounded-2xl p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[0.07]">
       <div className="flex items-center gap-2 text-zinc-200 text-xs font-medium uppercase tracking-wide mb-2">
         {icon}
         <span>{label}</span>
@@ -96,8 +96,9 @@ function FeatureCard({ icon, title, desc }: { icon: React.ReactNode, title: stri
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="group relative p-6 rounded-2xl bg-zinc-900/45 border border-white/10 backdrop-blur-sm transition-all hover:bg-zinc-900/80 hover:border-white/20"
+      className="group relative p-6 rounded-2xl bg-zinc-900/50 border border-white/12 backdrop-blur-sm transition-all hover:bg-zinc-900/75 hover:border-cyan-200/30"
     >
+      <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_100%_0%,rgba(125,211,252,0.18),transparent_40%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-white mb-4 ring-1 ring-white/10 group-hover:bg-white/20 transition-colors">
         {icon}
       </div>
