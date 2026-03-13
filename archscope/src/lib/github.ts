@@ -6,7 +6,7 @@ export interface GitHubRepoData {
 }
 
 const GITHUB_API = "https://api.github.com";
-const headers = process.env.GITHUB_TOKEN
+const headers: any = process.env.GITHUB_TOKEN
     ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
     : {};
 

@@ -1,5 +1,5 @@
 import { StackReport } from "@/lib/types";
-import { Github, Star, Box, Server, Database, Cloud, Tool, BarChart, ExternalLink } from "lucide-react";
+import { Github, Star, Box, Server, Database, Cloud, Wrench, BarChart, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 
 export const ReportCard = ({ data }: { data: StackReport }) => {
@@ -56,7 +56,7 @@ export const ReportCard = ({ data }: { data: StackReport }) => {
                 <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
                     <CategoryBlock
                         title="DevTools & Build"
-                        icon={<Tool className="text-zinc-400" />}
+                        icon={<Wrench className="text-zinc-400" />}
                         items={data.devtools}
                         emptyText="No specific dev tools detected."
                     />
