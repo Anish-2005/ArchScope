@@ -16,9 +16,9 @@ export default function Home() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-7 mx-auto"
+          className="mb-8 mx-auto"
         >
-          <div className="eyebrow-pill inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm text-zinc-200 backdrop-blur-md transition-colors hover:bg-white/10">
+          <div className="eyebrow-pill inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm text-zinc-100 backdrop-blur-md transition-colors hover:bg-white/15">
             <span className="flex h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(125,211,252,0.95)]"></span>
             Trusted by platform and architecture teams
           </div>
@@ -28,18 +28,18 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="hero-title text-4xl sm:text-6xl lg:text-7xl font-semibold text-zinc-50 mb-6 drop-shadow-[0_10px_35px_rgba(0,0,0,0.55)]"
+          className="hero-title text-4xl sm:text-6xl lg:text-7xl font-semibold text-zinc-50 mb-5 drop-shadow-[0_8px_24px_rgba(9,16,25,0.45)]"
         >
-          Engineering intelligence
+          Understand codebases
           <br />
-          <span className="bg-gradient-to-r from-cyan-100 via-zinc-100 to-rose-100 bg-clip-text text-transparent">for organizational architecture decisions.</span>
+          <span className="bg-gradient-to-r from-cyan-100 via-sky-100 to-teal-100 bg-clip-text text-transparent">for better architecture decisions.</span>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-base sm:text-lg text-zinc-300 max-w-3xl mx-auto mb-10 font-medium leading-relaxed"
+          className="text-base sm:text-lg text-zinc-200/90 max-w-3xl mx-auto mb-10 font-medium leading-relaxed"
         >
           ArchScope analyzes repositories into executive-ready architecture reports: stack composition, operational complexity, and implementation risks. Use it to standardize technical reviews across teams.
         </motion.p>
@@ -96,14 +96,14 @@ function FeatureCard({ icon, title, desc }: { icon: React.ReactNode, title: stri
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="group relative p-6 rounded-2xl bg-zinc-900/50 border border-white/12 backdrop-blur-sm transition-all hover:bg-zinc-900/75 hover:border-cyan-200/30"
+      className="group relative p-6 rounded-2xl bg-slate-900/35 border border-white/15 backdrop-blur-sm transition-all hover:bg-slate-900/55 hover:border-cyan-200/40"
     >
       <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_100%_0%,rgba(125,211,252,0.18),transparent_40%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-white mb-4 ring-1 ring-white/10 group-hover:bg-white/20 transition-colors">
         {icon}
       </div>
       <h3 className="text-base font-semibold text-zinc-100 mb-2">{title}</h3>
-      <p className="text-sm text-zinc-400 leading-relaxed font-medium">{desc}</p>
+      <p className="text-sm text-zinc-300/85 leading-relaxed font-medium">{desc}</p>
     </motion.div>
   );
 }

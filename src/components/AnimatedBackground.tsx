@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 export const AnimatedBackground = () => {
     return (
         <div className="absolute inset-0 z-[-1] overflow-hidden flex items-center justify-center">
-            <div className="absolute inset-0 bg-[radial-gradient(1300px_550px_at_15%_-5%,rgba(34,211,238,0.14),transparent_60%),radial-gradient(900px_540px_at_85%_0%,rgba(251,113,133,0.12),transparent_58%),linear-gradient(180deg,#080b12_0%,#05070b_42%,#04060a_100%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(1300px_550px_at_15%_-5%,rgba(34,211,238,0.2),transparent_60%),radial-gradient(900px_540px_at_85%_0%,rgba(251,113,133,0.14),transparent_58%),linear-gradient(180deg,#172435_0%,#0f1a28_42%,#0b1118_100%)]" />
 
             <div className="absolute inset-0 opacity-50 bg-[linear-gradient(to_right,rgba(255,255,255,0.065)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.055)_1px,transparent_1px)] bg-[size:38px_38px] [mask-image:radial-gradient(ellipse_72%_58%_at_50%_8%,#000_32%,transparent_100%)]" />
 
