@@ -61,8 +61,8 @@ export const ScanForm = () => {
                 router.push(`/report/legacy/${encodedId}`);
             }
 
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'Failed to scan repository.');
         } finally {
             setIsLoading(false);
         }

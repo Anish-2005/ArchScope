@@ -1,14 +1,51 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #09090b;
-  --color-foreground: #fafafa;
+  --color-background: #06070a;
+  --color-foreground: #f6f7fb;
 }
 
 @layer base {
+  :root {
+    --surface-1: rgba(255, 255, 255, 0.03);
+    --surface-2: rgba(255, 255, 255, 0.06);
+    --line-soft: rgba(255, 255, 255, 0.08);
+    --brand-cyan: #22d3ee;
+    --brand-emerald: #34d399;
+    --brand-amber: #f59e0b;
+  }
+
+  * {
+    border-color: var(--line-soft);
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     @apply antialiased;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .hero-title {
+    text-wrap: balance;
+  }
+
+  .soft-grid {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  .kpi-card {
+    background: radial-gradient(circle at top right, rgba(34, 211, 238, 0.08), transparent 40%), rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.09);
   }
 }

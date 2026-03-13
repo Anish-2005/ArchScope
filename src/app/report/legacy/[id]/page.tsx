@@ -9,21 +9,22 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 export default function LegacyReportPage() {
     const { id } = useParams();
     const router = useRouter();
+    const normalizedId = Array.isArray(id) ? id[0] : id;
 
     const [data, setData] = useState<StackReport | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!id) return;
+        if (!normalizedId) return;
 
         // Support both legacy base64 `id` formats
         let repoUrl = "";
         try {
-            if (id && id.includes('%3D')) {
-                repoUrl = atob(decodeURIComponent(id as string));
-            } else if (id && /^[A-Za-z0-9+/=]+$/.test(id)) {
-                repoUrl = atob(id as string);
+            if (normalizedId.includes('%3D')) {
+                repoUrl = atob(decodeURIComponent(normalizedId));
+            } else if (/^[A-Za-z0-9+/=]+$/.test(normalizedId)) {
+                repoUrl = atob(normalizedId);
             }
         } catch {
             // ignore
@@ -46,15 +47,15 @@ export default function LegacyReportPage() {
 
                 if (!res.ok) throw new Error(result.error || "Failed to scan");
                 setData(result);
-            } catch (err: any) {
-                setError(err.message);
+            } catch (err: unknown) {
+                setError(err instanceof Error ? err.message : "Failed to scan");
             } finally {
                 setLoading(false);
             }
         };
 
         fetchScan();
-    }, [id]);
+    }, [normalizedId]);
 
     return (
         <div className="flex-1 bg-black p-6 md:p-12 pb-24 selection:bg-white/20">

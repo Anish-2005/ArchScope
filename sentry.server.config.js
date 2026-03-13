@@ -1,6 +1,6 @@
 // Safe Sentry initialization on server: dynamic require with no-op fallback
 try {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const Sentry = require('@sentry/nextjs');
 
   Sentry.init({
@@ -8,6 +8,6 @@ try {
     tracesSampleRate: 0.2,
     environment: process.env.NODE_ENV,
   });
-} catch (err) {
+} catch {
   // @sentry/nextjs is not installed or not available — no-op
 }

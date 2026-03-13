@@ -2,13 +2,6 @@ import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import { Layers } from 'lucide-react';
 import './globals.css';
-// Initialize Sentry for client-side instrumentation
-try {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  require('../../sentry.client.config');
-} catch (e) {
-  // ignore in environments where Sentry isn't configured
-}
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });

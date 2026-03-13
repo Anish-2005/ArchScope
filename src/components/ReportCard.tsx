@@ -1,10 +1,17 @@
 import { StackReport } from "@/lib/types";
-import { Github, Star, Box, Server, Database, Cloud, Wrench, BarChart, ExternalLink, Activity, Link as LinkIcon, Check } from "lucide-react";
+import { Github, Star, Box, Server, Database, Cloud, Wrench, BarChart, ExternalLink, Activity, Link as LinkIcon, Check, ShieldAlert, Gauge, Layers, GitBranch } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
 export const ReportCard = ({ data }: { data: StackReport }) => {
     const [copied, setCopied] = useState(false);
+    const totalSignals = data.languages.length + data.frameworks.length + data.frontend.length + data.backend.length + data.database.length + data.infrastructure.length + data.devtools.length;
+    const complexityTier = data.complexityScore > 70 ? "High" : data.complexityScore > 40 ? "Moderate" : "Low";
+    const riskNote = data.complexityScore > 70
+        ? "High operational overhead likely. Standardization and platform guardrails are recommended."
+        : data.complexityScore > 40
+            ? "Balanced but growing complexity. Establish common patterns before scale increases."
+            : "Lean architecture profile. Preserve consistency and monitor drift as the codebase grows.";
 
     const handleCopy = () => {
         if (typeof window !== "undefined") {
@@ -47,14 +54,39 @@ export const ReportCard = ({ data }: { data: StackReport }) => {
                                 <ExternalLink className="w-4 h-4 text-zinc-500 group-hover:text-white transition-colors" /> GitHub Repository
                             </a>
                         </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3">
+                            <MiniKpi icon={<Layers className="w-4 h-4 text-cyan-300" />} label="Detected Signals" value={`${totalSignals}`} />
+                            <MiniKpi icon={<Gauge className="w-4 h-4 text-amber-300" />} label="Complexity Tier" value={complexityTier} />
+                            <MiniKpi icon={<GitBranch className="w-4 h-4 text-emerald-300" />} label="Repo Scale" value={data.repo.stars > 1000 ? "Mature" : "Emerging"} />
+                        </div>
                     </div>
                     <ComplexityGauge score={data.complexityScore} />
                 </div>
             </div>
 
+            <div className="bg-zinc-900/30 border border-white/10 rounded-3xl p-6 sm:p-8">
+                <div className="flex items-start gap-3 mb-3">
+                    <div className="h-9 w-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+                        <ShieldAlert className="w-5 h-5 text-amber-300" />
+                    </div>
+                    <div>
+                        <h2 className="text-lg font-semibold text-zinc-100">Executive Summary</h2>
+                        <p className="text-sm text-zinc-400">Portfolio-level interpretation of repository architecture.</p>
+                    </div>
+                </div>
+                <p className="text-zinc-300 leading-relaxed text-sm sm:text-base">{riskNote}</p>
+            </div>
+
             {/* Bento Grid layout */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
                 <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                    <CategoryBlock
+                        title="Frameworks"
+                        icon={<Layers className="text-cyan-400" />}
+                        items={data.frameworks}
+                        emptyText="No framework signatures detected."
+                    />
                     <CategoryBlock
                         title="Frontend Ecosystem"
                         icon={<Box className="text-blue-400" />}
@@ -129,6 +161,18 @@ const CategoryBlock = ({ title, icon, items, emptyText, isCompact = false }: { t
                     <p className="text-zinc-600 font-mono text-xs bg-black/20 p-3 rounded-xl border border-white/5 hidden sm:block">{emptyText}</p>
                 )}
             </div>
+        </div>
+    );
+};
+
+const MiniKpi = ({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) => {
+    return (
+        <div className="rounded-xl border border-white/10 bg-black/35 p-3">
+            <div className="text-zinc-400 text-[11px] uppercase tracking-wide font-mono mb-1 flex items-center gap-1.5">
+                {icon}
+                {label}
+            </div>
+            <p className="text-zinc-100 text-sm font-semibold">{value}</p>
         </div>
     );
 };

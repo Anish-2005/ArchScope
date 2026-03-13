@@ -33,8 +33,8 @@ export default function ReportByOwnerRepo() {
 
                 if (!res.ok) throw new Error(result.error || "Failed to scan");
                 setData(result);
-            } catch (err: any) {
-                setError(err.message);
+            } catch (err: unknown) {
+                setError(err instanceof Error ? err.message : "Failed to scan");
             } finally {
                 setLoading(false);
             }
