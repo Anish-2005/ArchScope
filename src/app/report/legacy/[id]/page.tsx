@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { StackReport } from "@/lib/types";
 import { ReportCard } from "@/components/ReportCard";
 import { ArrowLeft, Loader2 } from "lucide-react";
+import { AnimatedBackground } from "@/components/AnimatedBackground";
 
 export default function LegacyReportPage() {
     const { id } = useParams();
@@ -58,26 +59,28 @@ export default function LegacyReportPage() {
     }, [normalizedId]);
 
     return (
-        <div className="flex-1 bg-black p-6 md:p-12 pb-24 selection:bg-white/20">
-            <div className="max-w-5xl mx-auto">
+        <div className="relative flex-1 p-6 md:p-12 pb-24 selection:bg-cyan-300/30 overflow-hidden">
+            <AnimatedBackground />
+
+            <div className="relative z-10 max-w-5xl mx-auto">
                 <button
                     onClick={() => router.push("/")}
-                    className="flex items-center gap-2 text-zinc-500 hover:text-white transition-colors mb-8 font-medium text-sm group"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-zinc-300 hover:text-white hover:bg-white/10 transition-colors mb-8 font-medium text-sm group backdrop-blur-md"
                 >
                     <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to Search
                 </button>
 
                 {loading && (
-                    <div className="flex flex-col items-center justify-center mt-32 space-y-6">
-                        <Loader2 className="w-8 h-8 text-white animate-spin" />
-                        <p className="animate-pulse text-sm font-mono tracking-wide text-zinc-500 uppercase">Mapping Architecture...</p>
+                    <div className="flex flex-col items-center justify-center mt-24 space-y-5 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-12">
+                        <Loader2 className="w-8 h-8 text-cyan-200 animate-spin" />
+                        <p className="animate-pulse text-sm font-mono tracking-wide text-zinc-300 uppercase">Mapping Architecture...</p>
                     </div>
                 )}
 
                 {error && (
-                    <div className="p-8 bg-red-500/10 border border-red-500/20 text-red-500 rounded-3xl flex flex-col items-center max-w-xl mx-auto mt-20">
-                        <h2 className="text-xl font-semibold mb-3 text-red-400">Analysis Failed</h2>
-                        <p className="text-sm text-red-300 text-center">{error}</p>
+                    <div className="p-8 bg-rose-300/10 border border-rose-200/25 rounded-3xl flex flex-col items-center max-w-xl mx-auto mt-20 backdrop-blur-xl">
+                        <h2 className="text-xl font-semibold mb-3 text-rose-100">Analysis Failed</h2>
+                        <p className="text-sm text-rose-100/85 text-center">{error}</p>
                     </div>
                 )}
 
