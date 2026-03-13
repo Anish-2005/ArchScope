@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 
 export default function Home() {
   return (
-    <div className="relative flex flex-1 flex-col items-center justify-start px-6 py-10 sm:px-10 sm:py-16 overflow-hidden selection:bg-cyan-300/30">
+    <div className="relative flex flex-1 flex-col items-center justify-start px-4 py-8 sm:px-8 sm:py-14 lg:px-10 lg:py-16 overflow-hidden selection:bg-cyan-300/30">
       <AnimatedBackground />
 
       <div className="z-10 w-full max-w-6xl flex flex-col text-center">
@@ -28,7 +28,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="hero-title text-4xl sm:text-6xl lg:text-7xl font-semibold text-zinc-50 mb-5 drop-shadow-[0_8px_24px_rgba(9,16,25,0.45)]"
+          className="hero-title text-3xl sm:text-5xl lg:text-7xl font-semibold text-zinc-50 mb-5 drop-shadow-[0_8px_24px_rgba(9,16,25,0.45)]"
         >
           Understand codebases
           <br />
@@ -39,7 +39,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-base sm:text-lg text-zinc-200/90 max-w-3xl mx-auto mb-10 font-medium leading-relaxed"
+          className="text-sm sm:text-base lg:text-lg text-zinc-200/90 max-w-3xl mx-auto mb-8 sm:mb-10 font-medium leading-relaxed"
         >
           ArchScope analyzes repositories into executive-ready architecture reports: stack composition, operational complexity, and implementation risks. Use it to standardize technical reviews across teams.
         </motion.p>
@@ -49,14 +49,14 @@ export default function Home() {
           <ScanForm />
         </div>
 
-        <div className="mb-14 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 text-left">
+        <div className="mb-12 sm:mb-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 text-left">
           <StatChip icon={<Timer className="w-4 h-4 text-cyan-300" />} label="Scan Turnaround" value="~2s Typical" />
           <StatChip icon={<Layers className="w-4 h-4 text-emerald-300" />} label="Stack Dimensions" value="7+ Categories" />
           <StatChip icon={<Workflow className="w-4 h-4 text-amber-300" />} label="Decision Output" value="Actionable" />
           <StatChip icon={<Shield className="w-4 h-4 text-zinc-200" />} label="Use Case" value="Org Governance" />
         </div>
 
-        <div className="section-shell mt-6 rounded-3xl p-4 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 w-full max-w-6xl mx-auto text-left">
+        <div className="section-shell mt-4 sm:mt-6 rounded-3xl p-4 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 w-full max-w-6xl mx-auto text-left">
           <FeatureCard
             icon={<Zap className="w-5 h-5 text-white" />}
             title="Executive-Ready Summaries"
