@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@opentelemetry/core": "^2.6.0",
-    "@sentry/nextjs": "^8.55.0",
+    "@sentry/nextjs": "^10.43.0",
     "@upstash/redis": "^1.37.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.36.0",
