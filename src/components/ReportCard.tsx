@@ -2,6 +2,7 @@ import { StackReport } from "@/lib/types";
 import { Github, Star, Box, Server, Database, Cloud, Wrench, BarChart, ExternalLink, Activity, Link as LinkIcon, Check, ShieldAlert, Gauge, Layers, GitBranch } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { Logo } from "./Logo";
 
 export const ReportCard = ({ data }: { data: StackReport }) => {
     const [copied, setCopied] = useState(false);
@@ -26,6 +27,9 @@ export const ReportCard = ({ data }: { data: StackReport }) => {
             {/* Header Card */}
             <div className="bg-white/[0.07] border border-white/15 rounded-3xl p-4 sm:p-6 lg:p-10 relative overflow-hidden backdrop-blur-2xl shadow-[0_24px_64px_rgba(2,8,20,0.35)]">
                 <div className="absolute -top-28 -right-28 w-96 h-96 bg-cyan-300/12 rounded-full blur-[110px] pointer-events-none" />
+                <div className="absolute -top-10 -right-10 opacity-[0.03] pointer-events-none select-none">
+                    <Logo size={400} />
+                </div>
 
                 <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-8">
                     <div className="space-y-4 max-w-2xl w-full">
