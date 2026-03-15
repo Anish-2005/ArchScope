@@ -18,7 +18,6 @@ import {
   Zap
 } from 'lucide-react';
 import Link from 'next/link';
-import { AnimatedBackground } from '@/components/AnimatedBackground';
 
 const NavItem = ({ icon: Icon, label, href, active = false }: { icon: any, label: string, href: string, active?: boolean }) => (
   <a 
@@ -36,18 +35,17 @@ const NavItem = ({ icon: Icon, label, href, active = false }: { icon: any, label
 
 export default function DocsPage() {
   return (
-    <div className="relative flex-1 flex flex-col items-center">
-      <AnimatedBackground />
-      
-      {/* Decorative Brand Mark */}
-      <div className="absolute top-20 right-[-10%] opacity-[0.02] pointer-events-none select-none">
-          <Logo size={800} />
-      </div>
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="relative w-full flex flex-col items-center"
+    >
 
-      <div className="z-10 flex flex-col md:flex-row max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 md:py-12 gap-10">
+      <div className="z-10 flex flex-col md:flex-row max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 md:py-12 gap-10 min-h-screen">
       
       {/* Sidebar Navigation */}
-      <aside className="w-full md:w-64 shrink-0 space-y-8 hidden md:block sticky top-28 self-start">
+      <aside className="w-full md:w-64 shrink-0 space-y-8 hidden md:block sticky top-24 self-start max-h-[calc(100vh-8rem)] overflow-y-auto pr-4 scrollbar-hide">
         <div className="space-y-1">
           <p className="px-4 text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-500 mb-3">Introduction</p>
           <NavItem icon={BookOpen} label="Abstract" href="#abstract" active />
@@ -231,6 +229,6 @@ export default function DocsPage() {
         </div>
       </main>
     </div>
-  </div>
+    </motion.div>
   );
 }

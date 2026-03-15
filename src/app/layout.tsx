@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import { Navbar } from '@/components/Navbar';
 import { Logo } from '@/components/Logo';
+import { AnimatedBackground } from '@/components/AnimatedBackground';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import './globals.css';
 
@@ -20,11 +22,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark scroll-smooth">
-      <body className={`${inter.variable} ${mono.variable} font-sans min-h-screen text-zinc-50 selection:bg-cyan-300/30 flex flex-col antialiased`}>
+      <body className={`${inter.variable} ${mono.variable} font-sans min-h-screen text-zinc-50 selection:bg-cyan-300/30 flex flex-col antialiased overflow-x-hidden`}>
+        <AnimatedBackground />
+        
+        {/* Persistent Brand Mark */}
+        <div className="fixed top-[-10%] sm:top-[-5%] right-[-10%] pointer-events-none select-none opacity-[0.05] z-0">
+          <Logo size={600} />
+        </div>
+
         <Navbar />
 
-        <main className="flex-1 flex flex-col">
-          {children}
+        <main className="flex-1 flex flex-col relative z-10">
+          <AnimatePresence mode="wait">
+            {children}
+          </AnimatePresence>
         </main>
 
         <footer className="border-t border-white/5 bg-slate-950/20 py-10 sm:py-14">

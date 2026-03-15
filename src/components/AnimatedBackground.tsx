@@ -11,6 +11,7 @@ export const AnimatedBackground = () => {
 
             <motion.div
                 className="absolute inset-x-0 top-[12%] h-px bg-gradient-to-r from-transparent via-cyan-200/55 to-transparent"
+                style={{ willChange: 'opacity, transform' }}
                 initial={{ opacity: 0, scaleX: 0.75 }}
                 animate={{ opacity: 0.8, scaleX: 1 }}
                 transition={{ duration: 1.6, ease: "easeOut" }}
@@ -18,12 +19,14 @@ export const AnimatedBackground = () => {
 
             <motion.div
                 className="absolute top-[-14%] left-[-8%] w-[620px] h-[620px] bg-cyan-400/12 rounded-full blur-[130px] pointer-events-none"
+                style={{ willChange: 'opacity' }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: [0.45, 0.62, 0.45] }}
                 transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
             />
             <motion.div
                 className="absolute top-[12%] right-[-12%] w-[560px] h-[560px] bg-rose-400/10 rounded-full blur-[130px] pointer-events-none"
+                style={{ willChange: 'opacity' }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: [0.35, 0.52, 0.35] }}
                 transition={{ duration: 14, delay: 0.4, repeat: Infinity, ease: "easeInOut" }}

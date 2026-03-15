@@ -2,25 +2,18 @@
 
 import { ScanForm } from '@/components/ScanForm';
 import GettingStarted from '@/components/GettingStarted';
-import { AnimatedBackground } from '@/components/AnimatedBackground';
 import { Layers, Zap, Gauge, Workflow, Shield, Timer } from 'lucide-react';
-import { Logo } from '@/components/Logo';
 import { motion } from 'framer-motion';
 
 export default function Home() {
   return (
-    <div className="relative flex flex-1 flex-col items-center justify-start px-4 py-8 sm:px-8 sm:py-14 lg:px-10 lg:py-16 overflow-hidden selection:bg-cyan-300/30">
-      <AnimatedBackground />
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="relative flex flex-1 flex-col items-center justify-start px-4 py-8 sm:px-8 sm:py-14 lg:px-10 lg:py-16 selection:bg-cyan-300/30"
+    >
 
-      {/* Hero Brand Mark */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 0.05, scale: 1 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-        className="absolute top-[-10%] sm:top-[-5%] right-[-10%] pointer-events-none select-none"
-      >
-        <Logo size={600} />
-      </motion.div>
 
       <div className="z-10 w-full max-w-6xl flex flex-col text-center">
         <motion.div
@@ -95,7 +88,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
