@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Logo } from './Logo';
 
 export const ScanForm = () => {
     const [url, setUrl] = useState('');
@@ -98,10 +99,17 @@ export const ScanForm = () => {
                     <button
                         type="submit"
                         disabled={isLoading || !url}
-                        className="w-full sm:w-auto justify-center bg-zinc-100 text-zinc-950 hover:bg-white px-5 py-2.5 sm:py-3 rounded-xl font-medium transition-all shadow-md flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed group/btn"
+                        className="w-full sm:w-auto justify-center bg-zinc-100 text-zinc-950 hover:bg-white px-5 py-2.5 sm:py-3 rounded-xl font-medium transition-all shadow-md flex items-center gap-2.5 disabled:opacity-50 disabled:cursor-not-allowed group/btn"
                     >
-                        {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Analyze"}
-                        {!isLoading && <ArrowRight className="w-4 h-4 opacity-50 group-hover/btn:opacity-100 group-hover/btn:translate-x-0.5 transition-all text-zinc-500" />}
+                        {isLoading ? (
+                            <Loader2 className="w-4 h-4 animate-spin text-zinc-900" />
+                        ) : (
+                            <>
+                                <Logo size={18} className="brightness-0" />
+                                <span>Analyze</span>
+                            </>
+                        )}
+                        {!isLoading && <ArrowRight className="w-4 h-4 opacity-50 group-hover/btn:opacity-100 group-hover/btn:translate-x-0.5 transition-all text-zinc-700" />}
                     </button>
                 </div>
             </form>
