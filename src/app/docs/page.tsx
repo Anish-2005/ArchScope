@@ -117,11 +117,28 @@ export default function DocsPage() {
              </p>
           </DocsSection>
 
-          <DocsSection id={SITE_CONFIG.sections.cli} title="CLI Integration" gradientFrom="from-zinc-400/20" accentColor="bg-zinc-400">
-             <div className="relative p-6 rounded-2xl bg-black border border-white/10 font-mono text-sm overflow-hidden">
-                  <div className="space-y-2 text-xs sm:text-sm">
-                    <p className="text-zinc-500"># Analyze a repository</p>
-                    <p className="text-cyan-300">$ npx @archscope/cli scan v1</p>
+          <DocsSection id={SITE_CONFIG.sections.cli} title="Interface (CLI)" gradientFrom="from-zinc-400/20" accentColor="bg-zinc-400">
+             <p className="text-zinc-300 leading-relaxed text-sm mb-6">
+               The ArchScope CLI allows you to trigger deep architectural scans directly from your terminal or CI/CD pipelines.
+             </p>
+             <div className="relative p-6 rounded-2xl bg-slate-950 border border-white/10 font-mono text-sm overflow-hidden group">
+                  <div className="absolute top-3 right-4 flex gap-1.5">
+                    <div className="w-2.5 h-2.5 rounded-full bg-white/5 group-hover:bg-red-500/40 transition-colors" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-white/5 group-hover:bg-amber-500/40 transition-colors" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-white/5 group-hover:bg-emerald-500/40 transition-colors" />
+                  </div>
+                  <div className="space-y-4 text-[13px]">
+                    <div className="space-y-1">
+                      <p className="text-zinc-500 text-xs italic">// Install global binary</p>
+                      <p className="text-cyan-400">npm install -g @archscope/cli</p>
+                    </div>
+                    <div className="space-y-1 pt-2">
+                      <p className="text-zinc-500 text-xs italic">// Run a tactical scan</p>
+                      <p className="text-zinc-100 flex gap-2">
+                        <span className="text-emerald-400">$</span>
+                        <span>archscope scan <span className="text-amber-400">facebook/react</span> --output <span className="text-cyan-400">json</span></span>
+                      </p>
+                    </div>
                   </div>
              </div>
           </DocsSection>
