@@ -37,46 +37,49 @@ program
 
     try {
         setTimeout(() => {
-            spinner.text = chalk.cyan('Executing Stack Detection Heuristics...');
+            spinner.text = chalk.cyan('Ingesting Source Topology...');
             setTimeout(() => {
-                spinner.text = chalk.blue('Calculating Operational Complexity Index...');
+                spinner.text = chalk.blue('Parsing Manifest Signatures (.json, .yml, .lock)...');
                 setTimeout(() => {
-                    spinner.stop();
-                    
-                    const report = {
-                        repo: repoUrl,
-                        stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
-                        complexity: 42,
-                        status: 'Optimal',
-                        risk: 'Low'
-                    };
+                    spinner.text = chalk.magenta('Executing Structural Heuristics...');
+                    setTimeout(() => {
+                        spinner.stop();
+                        
+                        const report = {
+                            repo: repoUrl,
+                            stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+                            complexity: 42,
+                            status: 'Optimal',
+                            risk: 'Low'
+                        };
 
-                    if (options.output === 'json') {
-                        console.log(JSON.stringify(report, null, 2));
-                    } else {
-                        const output = [
-                            '',
-                            `${chalk.bold('Repository:')} ${chalk.cyan(report.repo)}`,
-                            `${chalk.bold('Status:')}     ${chalk.green(report.status)}`,
-                            `${chalk.bold('Engine Score:')} ${chalk.bold.yellow(report.complexity)}/100`,
-                            '',
-                            `${chalk.bold('Detected Tech Stack:')}`,
-                            report.stack.map(s => `  ${chalk.gray('•')} ${s}`).join('\n'),
-                            '',
-                            chalk.dim('View full architectural narrative at:'),
-                            chalk.underline.cyan(`https://archscope.io/report/${repo}`),
-                            ''
-                        ].join('\n');
+                        if (options.output === 'json') {
+                            console.log(JSON.stringify(report, null, 2));
+                        } else {
+                            const output = [
+                                '',
+                                `${chalk.bold('Repository:')} ${chalk.cyan(report.repo)}`,
+                                `${chalk.bold('Status:')}     ${chalk.green(report.status)}`,
+                                `${chalk.bold('Engine Score:')} ${chalk.bold.yellow(report.complexity)}/100`,
+                                '',
+                                `${chalk.bold('Detected Tech Stack:')}`,
+                                report.stack.map(s => `  ${chalk.gray('•')} ${s}`).join('\n'),
+                                '',
+                                chalk.dim('View full architectural narrative at:'),
+                                chalk.underline.cyan(`https://archscope.io/report/${repo}`),
+                                ''
+                            ].join('\n');
 
-                        process.stdout.write(boxen(output, {
-                            padding: 1,
-                            margin: { top: 1, bottom: 1, left: 2, right: 2 },
-                            borderStyle: 'round',
-                            borderColor: 'cyan',
-                            title: 'ARCHITECTURAL REPORT',
-                            titleAlignment: 'center'
-                        }) + '\n');
-                    }
+                            process.stdout.write(boxen(output, {
+                                padding: 1,
+                                margin: { top: 1, bottom: 1, left: 2, right: 2 },
+                                borderStyle: 'round',
+                                borderColor: 'cyan',
+                                title: 'ARCHITECTURAL REPORT',
+                                titleAlignment: 'center'
+                            }) + '\n');
+                        }
+                    }, 800);
                 }, 800);
             }, 800);
         }, 800);
