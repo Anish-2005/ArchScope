@@ -12,9 +12,12 @@ export const HomeHero = () => {
         transition={{ duration: 0.5 }}
         className="mb-8 mx-auto"
       >
-        <div className="eyebrow-pill inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm text-zinc-100 backdrop-blur-md transition-colors hover:bg-white/15">
-          <span className="flex h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(125,211,252,0.95)]"></span>
-          Trusted by platform and architecture teams
+        <div className="inline-flex items-center gap-2.5 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-cyan-400 bg-cyan-400/5 border border-cyan-400/20 backdrop-blur-md">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500 shadow-[0_0_10px_rgba(34,211,238,0.8)]"></span>
+          </span>
+          V1.2 Protocol Active
         </div>
       </motion.div>
 

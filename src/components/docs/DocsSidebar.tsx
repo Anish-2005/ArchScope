@@ -62,17 +62,16 @@ export const DocsSidebar = ({ activeSection }: DocsSidebarProps) => {
         <NavItem icon={Settings} label="Configuration" href="#config" active={activeSection === 'config'} />
       </div>
 
-      <div className="pt-6 border-t border-white/5">
-        <div className="glass-panel p-4 rounded-2xl bg-gradient-to-br from-cyan-400/5 to-teal-400/5">
-          <h4 className="text-xs font-semibold text-zinc-100 mb-2 flex items-center gap-2">
-            <Logo size={14} />
-            Open Source
+      <div className="pt-8 border-t border-white/5">
+        <div className="relative overflow-hidden p-5 rounded-2xl bg-slate-900/50 border border-white/10 group transition-all duration-500 hover:border-cyan-500/20">
+          <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/5 to-teal-400/5 opacity-50" />
+          <h4 className="relative z-10 text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] mb-2 flex items-center gap-2">
+            <Logo size={12} />
+            Community Focus
           </h4>
-          <p className="text-[12px] text-zinc-400 leading-relaxed mb-3">
-            ArchScope is built by engineers for engineers.
-          </p>
-          <a href={SITE_CONFIG.links.github} className="text-[11px] font-bold text-cyan-300 hover:text-cyan-200 transition-colors flex items-center gap-1.5">
-            GitHub <ExternalLink className="w-3 h-3" />
+          <p className="relative z-10 text-[12px] text-zinc-400 leading-relaxed mb-4 font-medium">Build world-class architecture with the ArchScope community.</p>
+          <a href={SITE_CONFIG.links.github} className="relative z-10 inline-flex items-center gap-2 text-[11px] font-bold text-cyan-400 hover:text-cyan-300 transition-colors uppercase tracking-wider">
+            View Repository <ExternalLink className="w-3 h-3" />
           </a>
         </div>
       </div>
