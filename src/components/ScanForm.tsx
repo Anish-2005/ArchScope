@@ -76,7 +76,18 @@ export const ScanForm = () => {
             animate={{ opacity: 1, y: 0 }}
             className="w-full max-w-2xl mx-auto"
         >
-            <form onSubmit={handleScan} className="relative group flex items-center justify-center">
+            <form 
+                onSubmit={handleScan} 
+                className="relative group flex items-center justify-center"
+                onMouseMove={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    e.currentTarget.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                    e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+                }}
+            >
+                {/* Tactical Highlight Layer */}
+                <div className="absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(34,211,238,0.08),transparent_40%)] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                
                 <div className={`absolute inset-0 rounded-2xl blur-xl pointer-events-none transition-opacity duration-500 ${isActive ? 'opacity-100 bg-gradient-to-r from-cyan-400/35 via-sky-400/25 to-teal-300/35' : 'opacity-60 bg-gradient-to-r from-cyan-400/20 via-sky-400/10 to-teal-300/20'} group-hover:opacity-100`} />
                 <div className={`relative flex w-full flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 rounded-2xl p-1.5 shadow-2xl transition-all backdrop-blur-md ${isActive ? 'bg-slate-900/75 border border-cyan-200/40 ring-1 ring-cyan-200/30 shadow-[0_0_0_1px_rgba(125,211,252,0.25),0_24px_45px_rgba(8,32,56,0.45)]' : 'bg-zinc-900/50 border border-white/10'} group-focus-within:bg-slate-900/85 group-focus-within:border-cyan-200/55 group-focus-within:ring-2 group-focus-within:ring-cyan-200/45`}>
                     <div className="pl-3 sm:pl-4 pr-2 flex items-center text-zinc-400 h-10 sm:h-auto">

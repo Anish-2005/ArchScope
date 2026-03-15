@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Timer, Layers, Workflow, Shield } from 'lucide-react';
+import { SITE_CONFIG } from '@/constants/site';
 
 const StatChip = ({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) => {
   return (
@@ -21,10 +22,10 @@ const StatChip = ({ icon, label, value }: { icon: React.ReactNode; label: string
 export const StatsSection = () => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 w-full max-w-5xl mb-20">
-      <StatChip icon={<Timer className="w-4 h-4 text-cyan-300" />} label="Scan Turnaround" value="~2s Typical" />
-      <StatChip icon={<Layers className="w-4 h-4 text-emerald-300" />} label="Stack Dimensions" value="7+ Categories" />
-      <StatChip icon={<Workflow className="w-4 h-4 text-amber-300" />} label="Decision Output" value="Actionable" />
-      <StatChip icon={<Shield className="w-4 h-4 text-zinc-200" />} label="Use Case" value="Org Governance" />
+      <StatChip icon={<Timer className="w-4 h-4 text-cyan-300" />} label="Scan Turnaround" value={SITE_CONFIG.stats.turnaround} />
+      <StatChip icon={<Layers className="w-4 h-4 text-emerald-300" />} label="Stack Dimensions" value={SITE_CONFIG.stats.dimensions} />
+      <StatChip icon={<Workflow className="w-4 h-4 text-amber-300" />} label="Decision Output" value={SITE_CONFIG.stats.output} />
+      <StatChip icon={<Shield className="w-4 h-4 text-zinc-200" />} label="Use Case" value={SITE_CONFIG.stats.useCase} />
     </div>
   );
 };

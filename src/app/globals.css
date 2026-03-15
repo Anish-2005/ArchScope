@@ -23,12 +23,13 @@
 
   body {
     background:
-      radial-gradient(1300px 660px at 6% -10%, rgba(34, 211, 238, 0.18), transparent 58%),
-      radial-gradient(980px 620px at 92% 6%, rgba(251, 113, 133, 0.14), transparent 60%),
-      linear-gradient(180deg, #121b27 0%, #0d1621 35%, #0b1118 100%);
+      radial-gradient(1300px 660px at 6% -10%, rgba(34, 211, 238, 0.12), transparent 58%),
+      radial-gradient(1000px 700px at 90% 10%, rgba(20, 184, 166, 0.08), transparent 60%),
+      radial-gradient(800px 600px at 50% 100%, rgba(34, 211, 238, 0.04), transparent 70%),
+      linear-gradient(180deg, #090e14 0%, #0b1118 40%, #020406 100%);
     color: var(--color-foreground);
     font-family: var(--font-sans), sans-serif;
-    @apply antialiased;
+    @apply antialiased selection:bg-cyan-500/30;
   }
 
   body::before {

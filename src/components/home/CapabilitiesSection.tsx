@@ -11,6 +11,11 @@ const FeatureCard = ({ icon, title, desc }: { icon: React.ReactNode, title: stri
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
+      onMouseMove={(e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        e.currentTarget.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+        e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+      }}
       className="group relative p-8 rounded-[2.5rem] bg-slate-900/40 border border-white/10 backdrop-blur-xl transition-all duration-500 hover:bg-slate-900/60 hover:border-cyan-500/50 hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)]"
     >
       <div className="pointer-events-none absolute inset-0 rounded-[2.5rem] bg-[radial-gradient(circle_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(34,211,238,0.12),transparent_45%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

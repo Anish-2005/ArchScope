@@ -13,31 +13,13 @@ import {
 } from 'lucide-react';
 import { DocsSidebar } from '@/components/docs/DocsSidebar';
 import { DocsSection } from '@/components/docs/DocsSection';
+import { useActiveSection } from '@/hooks/useActiveSection';
+import { SITE_CONFIG } from '@/constants/site';
+
+const DOCS_SECTIONS = Object.values(SITE_CONFIG.sections);
 
 export default function DocsPage() {
-  const [activeSection, setActiveSection] = useState('abstract');
-
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '-100px 0px -60% 0px',
-      threshold: 0
-    };
-
-    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(handleIntersect, observerOptions);
-    const sections = document.querySelectorAll('section[id]');
-    sections.forEach((section) => observer.observe(section));
-
-    return () => observer.disconnect();
-  }, []);
+  const activeSection = useActiveSection(DOCS_SECTIONS);
 
   return (
     <motion.div 
@@ -54,7 +36,7 @@ export default function DocsPage() {
         <main className="flex-1 max-w-3xl space-y-20 pb-24">
           
           {/* Section: Abstract */}
-          <section id="abstract" className="space-y-6 scroll-mt-28">
+          <section id={SITE_CONFIG.sections.abstract} className="space-y-6 scroll-mt-28">
             <div className="space-y-2">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/20 text-[10px] font-bold uppercase tracking-widest text-cyan-100 mb-4">
                 Documentation v1.0
@@ -69,7 +51,7 @@ export default function DocsPage() {
             </p>
           </section>
 
-          <DocsSection id="philosophy" title="Core Philosophy" gradientFrom="from-cyan-400/20" accentColor="bg-cyan-400">
+          <DocsSection id={SITE_CONFIG.sections.philosophy} title="Core Philosophy" gradientFrom="from-cyan-400/20" accentColor="bg-cyan-400">
              <p className="text-zinc-300 leading-relaxed">
                We believe that architecture is not just what is documented, but what is actually implemented in the codebase. ArchScope bridges the gap between intended design and technical reality.
              </p>
@@ -87,7 +69,7 @@ export default function DocsPage() {
              </div>
           </DocsSection>
 
-          <DocsSection id="heuristics" title="Stack Detection Heuristics" gradientFrom="from-teal-400/20" accentColor="bg-teal-400">
+          <DocsSection id={SITE_CONFIG.sections.heuristics} title="Stack Detection Heuristics" gradientFrom="from-teal-400/20" accentColor="bg-teal-400">
              <p className="text-zinc-300 leading-relaxed">
                Our engine performs recursive scanning to identify primary and secondary layers of the technical stack.
              </p>
@@ -109,7 +91,7 @@ export default function DocsPage() {
              </div>
           </DocsSection>
 
-          <DocsSection id="complexity" title="Architecture Index (Score)" gradientFrom="from-blue-400/20" accentColor="bg-blue-400">
+          <DocsSection id={SITE_CONFIG.sections.complexity} title="Architecture Index (Score)" gradientFrom="from-blue-400/20" accentColor="bg-blue-400">
              <p className="text-zinc-300 leading-relaxed">
                The Complexity Score (0-100) evaluates the cognitive overhead and maintenance difficulty of a project.
              </p>
@@ -129,13 +111,13 @@ export default function DocsPage() {
              </div>
           </DocsSection>
 
-          <DocsSection id="risk" title="Strategic Risk Assessment" gradientFrom="from-red-400/20" accentColor="bg-red-400">
+          <DocsSection id={SITE_CONFIG.sections.risk} title="Strategic Risk Assessment" gradientFrom="from-red-400/20" accentColor="bg-red-400">
              <p className="text-zinc-300 leading-relaxed">
                We flag high-risk patterns like technology fragmentation and unmaintained infrastructure layers.
              </p>
           </DocsSection>
 
-          <DocsSection id="cli" title="CLI Integration" gradientFrom="from-zinc-400/20" accentColor="bg-zinc-400">
+          <DocsSection id={SITE_CONFIG.sections.cli} title="CLI Integration" gradientFrom="from-zinc-400/20" accentColor="bg-zinc-400">
              <div className="relative p-6 rounded-2xl bg-black border border-white/10 font-mono text-sm overflow-hidden">
                   <div className="space-y-2 text-xs sm:text-sm">
                     <p className="text-zinc-500"># Analyze a repository</p>
@@ -144,22 +126,23 @@ export default function DocsPage() {
              </div>
           </DocsSection>
 
-          <DocsSection id="config" title="Configuration" gradientFrom="from-purple-400/20" accentColor="bg-purple-400">
+          <DocsSection id={SITE_CONFIG.sections.config} title="Configuration" gradientFrom="from-purple-400/20" accentColor="bg-purple-400">
              <p className="text-zinc-300 leading-relaxed text-sm">
                Customize detection rules by adding an <code className="bg-white/10 px-1.5 py-0.5 rounded text-purple-300">archscope.config.json</code> file to your repository root.
              </p>
           </DocsSection>
 
-          {/* Footer duplicated from layout if they want specific docs footer or just a gap */}
+          {/* Footer */}
           <div className="pt-16 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4">
               <Logo size={24} />
-              <p className="text-xs text-zinc-500 font-medium tracking-tight">© 2026 ArchScope Engine. Part of the Platform initiative.</p>
+              <p className="text-xs text-zinc-500 font-medium tracking-tight">© 2026 {SITE_CONFIG.name} Engine. Part of the Platform initiative.</p>
             </div>
             <div className="flex gap-6">
-               <a href="https://github.com/Anish-2005/ArchScope" className="text-xs text-zinc-400 hover:text-white transition-colors font-mono">v1.2.4-stable</a>
+               <a href={SITE_CONFIG.links.github} className="text-xs text-zinc-400 hover:text-white transition-colors font-mono">v1.2.4-stable</a>
             </div>
           </div>
+
         </main>
       </div>
     </motion.div>
