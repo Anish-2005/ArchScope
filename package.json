@@ -31,5 +31,8 @@
     "lightningcss": "^1.32.0",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "config": {
+    "supportedArchitectures": ["win32-x64", "linux-x64"]
   }
 }
