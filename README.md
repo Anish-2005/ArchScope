@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<p align="center">
+  <img src="public/favicon.svg" width="80" height="80" alt="ArchScope Logo">
+</p>
 
-## Getting Started
+# ▲ ArchScope Engine
 
-First, run the development server:
+[![MIT License](https://img.shields.io/badge/License-MIT-cyan.svg)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black.svg?logo=next.js)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue.svg?logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+[![Redis](https://img.shields.io/badge/Redis-Upstash-red?logo=redis)](https://upstash.com/)
+
+**ArchScope** is an elite architectural intelligence engine designed to convert complex repository signals into executive-ready narratives. It standardizes how platform teams and senior leadership evaluate technical debt, technology fragmentation, and operational risks.
+
+---
+
+## ✨ Features
+
+- 🔍 **Deep Stack Detection**: Recursive heuristics to identify primary and secondary technologies.
+- 📊 **Architecture Index**: A unified complexity score (0-100) based on cognitive overhead and dependency weight.
+- 🛡️ **Risk Assessment**: Identify high-risk patterns and unmaintained infrastructure layers.
+- 🚀 **CLI First**: Powerful command-line interface for CI/CD integration.
+- 💎 **Premium UI**: Modern, glassmorphic dashboard for visual report exploration.
+
+## 🛠️ Technology Stack
+
+| Layer | Technology |
+| :--- | :--- |
+| **Frontend** | Next.js 16 (App Router), React 19, Framer Motion |
+| **Styling** | Tailwind CSS (Glassmorphism design system) |
+| **Runtime** | Node.js / TypeScript |
+| **Database** | Redis (via Upstash) for report caching |
+| **Analytics** | Custom Structural Heuristics Engine |
+
+---
+
+## 💻 Getting Started
+
+### 1. Installation
+
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/Anish-2005/ArchScope.git
+cd ArchScope
+npm install
+```
+
+### 2. Environment Setup
+
+Create a `.env.local` file with your credentials:
+
+```env
+GITHUB_TOKEN=your_github_pat
+UPSTASH_REDIS_REST_URL=your_redis_url
+UPSTASH_REDIS_REST_TOKEN=your_redis_token
+```
+
+### 3. Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit `http://localhost:3000` to access the ArchScope Dashboard.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ⌨️ CLI Usage
 
-## Learn More
+ArchScope includes a dedicated CLI for tactical scans.
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Analyze a repository directly from your terminal
+npx archscope scan facebook/react --output text
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🗺️ Roadmap & Future Plans
 
-## Deploy on Vercel
+-   [ ] **Chrome Extension**: We are building a browser extension that integrates directly into `github.com`. Preview architectural scores and tech stacks while browsing repositories.
+-   [ ] **Dependency Graphing**: Interactive 3D visualization of repository internals.
+-   [ ] **Drift Detection**: Automated PR comments when architectural standards are violated.
+-   [ ] **Multi-provider Support**: Expanding heuristics to GitLab and Bitbucket.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🤝 Contributing
+
+We welcome contributions from the community! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<p align="center">
+  Built with ❤️ by the ArchScope Team<br>
+  <i>Standardizing Architecture Intelligence for the Modern Web</i>
+</p>
