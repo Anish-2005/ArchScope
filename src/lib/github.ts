@@ -1,5 +1,16 @@
+export interface GitHubMetadata {
+    name: string;
+    owner: {
+        login: string;
+    };
+    description: string | null;
+    stargazers_count: number;
+    languages_url: string;
+    default_branch: string;
+}
+
 export interface GitHubRepoData {
-    metadata: any;
+    metadata: GitHubMetadata;
     languages: string[];
     files: string[];
     dependencies: Record<string, string>;
@@ -98,7 +109,7 @@ export async function fetchGitHubData(owner: string, repo: string): Promise<GitH
     const treeRes = await fetch(`${GITHUB_API}/repos/${owner}/${normalizedRepo}/git/trees/${defaultBranch}?recursive=1`, { headers });
     await ensureGitHubOk(treeRes, "Repository tree fetch failed");
     const treeData = await treeRes.json();
-    const files = treeData.tree ? treeData.tree.map((t: any) => t.path) : [];
+    const files = treeData.tree ? treeData.tree.map((t: { path: string }) => t.path) : [];
 
     // 4. Try fetching package.json or other dependency files if present
     const dependencies: Record<string, string> = {};

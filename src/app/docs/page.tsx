@@ -1,15 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Logo } from '@/components/Logo';
 import { 
-  Terminal, 
   Zap,
   Command,
   FileCode,
-  Settings,
-  ExternalLink
+  Settings
 } from 'lucide-react';
 import { DocsSidebar } from '@/components/docs/DocsSidebar';
 import { DocsSection } from '@/components/docs/DocsSection';
@@ -129,11 +127,11 @@ export default function DocsPage() {
                   </div>
                   <div className="space-y-4 text-[13px]">
                     <div className="space-y-1">
-                      <p className="text-zinc-500 text-xs italic">// Install global binary</p>
+                      <p className="text-zinc-500 text-xs italic">{"// Install global binary"}</p>
                       <p className="text-cyan-400">npm install -g @archscope/cli</p>
                     </div>
                     <div className="space-y-1 pt-2">
-                      <p className="text-zinc-500 text-xs italic">// Run a tactical scan</p>
+                      <p className="text-zinc-500 text-xs italic">{"// Run a tactical scan"}</p>
                       <p className="text-zinc-100 flex gap-2">
                         <span className="text-emerald-400">$</span>
                         <span>archscope scan <span className="text-amber-400">facebook/react</span> --output <span className="text-cyan-400">json</span></span>

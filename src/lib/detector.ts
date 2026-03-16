@@ -99,7 +99,7 @@ export function detectStack(repoData: GitHubRepoData, url: string): StackReport 
     }
 
     // Calculate generic complexity based on found tool count
-    const itemsArray = [...result.frontend!, ...result.backend!, ...result.database!, ...result.infrastructure!, ...result.devtools!];
+
 
     const report = result as StackReport;
     report.complexityScore = calculateComplexity(report);

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
 
 export const Spotlight = () => {
@@ -25,11 +25,9 @@ export const Spotlight = () => {
             className="pointer-events-none fixed inset-0 z-30 opacity-40 mix-blend-soft-light"
             style={{
                 background: `radial-gradient(600px circle at var(--x) var(--y), rgba(34, 211, 238, 0.15), transparent 80%)`,
-                // @ts-ignore
                 '--x': springX,
-                // @ts-ignore
                 '--y': springY,
-            } as any}
+            } as React.CSSProperties}
         />
     );
 };

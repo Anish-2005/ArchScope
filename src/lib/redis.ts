@@ -22,7 +22,7 @@ export async function getCache<T>(key: string): Promise<T | null> {
     }
 }
 
-export async function setCache(key: string, value: any, ttlSeconds: number = 21600): Promise<void> {
+export async function setCache(key: string, value: unknown, ttlSeconds: number = 21600): Promise<void> {
     if (!redis) {
         console.warn('Skipping cache set: Redis not configured');
         return;

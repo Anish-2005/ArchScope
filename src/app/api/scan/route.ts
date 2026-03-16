@@ -3,6 +3,7 @@ import { parseGitHubUrl, fetchGitHubData, GitHubFetchError } from '@/lib/github'
 import { detectStack } from '@/lib/detector';
 import { getCache, setCache } from '@/lib/redis';
 import crypto from 'crypto';
+import { StackReport } from '@/lib/types';
 
 export async function POST(req: Request) {
     try {
@@ -24,7 +25,7 @@ export async function POST(req: Request) {
 
         // 1. Check Redis cache
         try {
-            const cached = await getCache<any>(cacheKey);
+            const cached = await getCache<StackReport>(cacheKey);
             if (cached) {
                 return NextResponse.json({ ...cached, cached: true });
             }

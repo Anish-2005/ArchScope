@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Logo } from './Logo';
-import { Search, Command as CommandIcon } from 'lucide-react';
+
 
 export const Navbar = () => {
   const pathname = usePathname();

@@ -4,7 +4,7 @@ import { Navbar } from '@/components/Navbar';
 import { Logo } from '@/components/Logo';
 import { Spotlight } from '@/components/Spotlight';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import './globals.css';
 

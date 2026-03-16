@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import ora from 'ora';
 import boxen from 'boxen';
 import gradient from 'gradient-string';
-import axios from 'axios';
+
 
 const program = new Command();
 
