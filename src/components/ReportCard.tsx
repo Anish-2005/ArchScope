@@ -1,5 +1,5 @@
 import { StackReport } from "@/lib/types";
-import { Github, Star, Box, Server, Database, Cloud, Wrench, BarChart, ExternalLink, Activity, Link as LinkIcon, Check, ShieldAlert, Gauge, Layers, GitBranch, BrainCircuit, ShieldCheck, ClipboardList, CircleAlert } from "lucide-react";
+import { Github, Star, Box, Server, Database, Cloud, Wrench, BarChart, ExternalLink, Activity, Link as LinkIcon, Check, ShieldAlert, Gauge, Layers, GitBranch, BrainCircuit, ShieldCheck, ClipboardList, CircleAlert, Download, Printer } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Logo } from "./Logo";
@@ -20,6 +20,16 @@ export const ReportCard = ({ data }: { data: StackReport }) => {
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         }
+    };
+
+    const exportJson = () => {
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = `archscope-${data.repo.owner}-${data.repo.name}.json`;
+        anchor.click();
+        URL.revokeObjectURL(url);
     };
 
     return (
@@ -45,6 +55,8 @@ export const ReportCard = ({ data }: { data: StackReport }) => {
                                 {copied ? <Check className="h-3 w-3 text-emerald-400" /> : <LinkIcon className="h-3 w-3" />}
                                 {copied ? "Token Copied" : "Share Engine Insight"}
                             </button>
+                            <button onClick={exportJson} className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition-all px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 hover:text-zinc-200"><Download className="h-3 w-3" /> Export JSON</button>
+                            <button onClick={() => window.print()} className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition-all px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 hover:text-zinc-200"><Printer className="h-3 w-3" /> Print brief</button>
                         </div>
                         <h1 className="text-3xl sm:text-4xl lg:text-7xl font-bold text-zinc-50 flex flex-wrap items-center gap-4 leading-tight tracking-tighter">
                             <Github className="w-12 h-12 lg:w-16 lg:h-16 text-zinc-400 shrink-0" />
