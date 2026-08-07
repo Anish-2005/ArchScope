@@ -1,14 +1,58 @@
 <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="100" height="100" rx="20" fill="#0b1118"/>
+  <defs>
+    <linearGradient id="grad-cyan-fav" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7dd3fc" />
+      <stop offset="100%" stop-color="#22d3ee" />
+    </linearGradient>
+    <linearGradient id="grad-teal-fav" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee" />
+      <stop offset="100%" stop-color="#14b8a6" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background container for high clarity favicon rendering -->
+  <rect width="100" height="100" rx="22" fill="#06090e" />
+
+  <!-- Procedural Hexagon -->
   <path
-    d="M50 10L85 30V70L50 90L15 70V30L50 10Z"
-    stroke="#22d3ee"
-    stroke-width="8"
+    d="M50 8L86 28.5V71.5L50 92L14 71.5V28.5L50 8Z"
+    stroke="url(#grad-cyan-fav)"
+    stroke-width="6"
     stroke-linejoin="round"
   />
-  <circle cx="50" cy="50" r="18" stroke="#7dd3fc" stroke-width="6" />
-  <path d="M50 25V40" stroke="#14b8a6" stroke-width="6" stroke-linecap="round" />
-  <path d="M50 60V75" stroke="#14b8a6" stroke-width="6" stroke-linecap="round" />
-  <path d="M25 50H40" stroke="#14b8a6" stroke-width="6" stroke-linecap="round" />
-  <path d="M60 50H75" stroke="#14b8a6" stroke-width="6" stroke-linecap="round" />
+
+  <!-- Inner Precision Ring -->
+  <circle 
+    cx="50" cy="50" r="22" 
+    stroke="url(#grad-teal-fav)" 
+    stroke-width="3" 
+    stroke-dasharray="4 4" 
+    opacity="0.8"
+  />
+
+  <!-- Crosshair Elements -->
+  <g stroke="#22d3ee" stroke-width="4" stroke-linecap="round">
+    <path d="M50 15V30" />
+    <path d="M50 70V85" />
+    <path d="M15 50H30" />
+    <path d="M70 50H85" />
+  </g>
+
+  <!-- Core "A" Prism -->
+  <path 
+    d="M32 72L50 35L68 72" 
+    stroke="url(#grad-cyan-fav)" 
+    stroke-width="7" 
+    stroke-linecap="round" 
+    stroke-linejoin="round" 
+  />
+  <path 
+    d="M40 60H60" 
+    stroke="url(#grad-teal-fav)" 
+    stroke-width="5" 
+    stroke-linecap="round" 
+  />
+
+  <!-- Glint effect -->
+  <circle cx="35" cy="35" r="2.5" fill="#ffffff" />
 </svg>
