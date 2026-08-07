@@ -1,21 +1,14 @@
 {
-  "name": "@archscope/cli",
+  "name": "archscope-cli",
   "version": "1.0.0",
-  "description": "Engineering Intelligence CLI for ArchScope",
-  "main": "index.js",
+  "description": "Enterprise architecture intelligence from the command line",
+  "main": "index.mjs",
   "bin": {
-    "archscope": "./index.js"
+    "archscope": "./index.mjs"
   },
-  "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
-    "chalk": "^5.3.0",
-    "commander": "^11.1.0",
-    "ora": "^7.0.1",
-    "axios": "^1.6.2",
-    "boxen": "^7.1.1",
-    "gradient-string": "^2.0.2"
-  }
+  "author": "ArchScope",
+  "license": "MIT"
 }
