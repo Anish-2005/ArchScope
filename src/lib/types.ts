@@ -20,6 +20,9 @@ export interface StackReport {
     };
     findings: Finding[];
     recommendations: Recommendation[];
+    architectureGraph: ArchitectureGraph;
+    scanId?: string;
+    scannedAt?: string;
     repo: {
         name: string;
         owner: string;
@@ -27,6 +30,27 @@ export interface StackReport {
         description: string | null;
         stars: number;
     };
+}
+
+export interface ArchitectureGraph {
+    nodes: { id: string; label: string; kind: "application" | "service" | "data" | "delivery" | "ml" }[];
+    edges: { from: string; to: string; label: string }[];
+}
+
+export interface ScanRecord {
+    id: string;
+    organization: string;
+    repository: string;
+    scannedAt: string;
+    report: StackReport;
+}
+
+export interface ArchitecturePolicy {
+    organization: string;
+    requireCi: boolean;
+    requireTestEvidence: boolean;
+    maxDependencies: number;
+    maxComplexity: number;
 }
 
 export interface Finding {

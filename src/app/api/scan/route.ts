@@ -1,13 +1,16 @@
 import { NextResponse } from 'next/server';
 import { parseGitHubUrl, fetchGitHubData, GitHubFetchError } from '@/lib/github';
 import { detectStack } from '@/lib/detector';
-import { getCache, setCache } from '@/lib/redis';
+import { getCache, setCache, getPolicy, saveScan } from '@/lib/redis';
 import crypto from 'crypto';
 import { StackReport } from '@/lib/types';
 
 export async function POST(req: Request) {
     try {
-        const { repoUrl } = await req.json();
+        const { repoUrl, organization: requestedOrganization } = await req.json();
+        const organization = typeof requestedOrganization === "string" && /^[a-z0-9-]{1,48}$/i.test(requestedOrganization)
+            ? requestedOrganization.toLowerCase()
+            : "personal";
 
         if (!repoUrl) {
             return NextResponse.json({ error: 'repoUrl is required' }, { status: 400 });
@@ -27,7 +30,9 @@ export async function POST(req: Request) {
         try {
             const cached = await getCache<StackReport>(cacheKey);
             if (cached) {
-                return NextResponse.json({ ...cached, cached: true });
+                const report = { ...cached, scanId: crypto.randomUUID(), scannedAt: new Date().toISOString() };
+                await saveScan({ id: report.scanId!, organization, repository: repoRef, scannedAt: report.scannedAt!, report });
+                return NextResponse.json({ ...report, cached: true });
             }
         } catch (e) {
             console.warn("Cache read failed", e);
@@ -46,6 +51,19 @@ export async function POST(req: Request) {
 
         // 3. Detect stack
         const report = detectStack(repoData, repoUrl);
+        report.scanId = crypto.randomUUID();
+        report.scannedAt = new Date().toISOString();
+        const policy = await getPolicy(organization);
+        if (policy.requireCi && report.signals.workflowCount === 0) {
+            report.findings.unshift({ id: "policy-ci", severity: "high", category: "delivery", title: "Policy breach: CI required", detail: `The ${organization} baseline requires an automated CI workflow.` });
+        }
+        if (policy.requireTestEvidence && report.signals.testSignals === 0) {
+            report.findings.unshift({ id: "policy-tests", severity: "high", category: "delivery", title: "Policy breach: test evidence required", detail: `The ${organization} baseline requires detectable test coverage conventions.` });
+        }
+        if (report.signals.dependencyCount > policy.maxDependencies || report.complexityScore > policy.maxComplexity) {
+            report.findings.unshift({ id: "policy-budget", severity: "medium", category: "architecture", title: "Policy budget exceeded", detail: "The repository exceeds the organization's configured dependency or complexity budget." });
+        }
+        await saveScan({ id: report.scanId!, organization, repository: repoRef, scannedAt: report.scannedAt!, report });
 
         // 4. Cache the result for 6 hours (21600 seconds)
         try {

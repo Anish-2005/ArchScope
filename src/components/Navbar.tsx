@@ -55,6 +55,9 @@ export const Navbar = () => {
             >
               Docs
             </Link>
+            <Link href="/portfolio" className={`hidden sm:inline text-[11px] sm:text-[12px] font-bold uppercase tracking-widest transition-all ${pathname === '/portfolio' ? 'text-cyan-400' : 'text-zinc-500 hover:text-zinc-200'}`}>
+              Portfolio
+            </Link>
             <Link 
               href="https://github.com/Anish-2005/ArchScope" 
               className="px-3 sm:px-5 py-1.5 sm:py-2 rounded-lg sm:rounded-xl bg-white/5 border border-white/10 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest hover:bg-white/10 hover:border-white/20 transition-all text-zinc-100 shadow-2xl"

@@ -53,5 +53,21 @@ export function buildIntelligence(report: StackReport, repoData: GitHubRepoData)
         signals: { fileCount: files.length, dependencyCount, workflowCount, testSignals, documentationScore, architecturePatterns: patterns },
         findings,
         recommendations: recommendations.slice(0, 5),
+        architectureGraph: buildArchitectureGraph(files, patterns, mlDependencies.length > 0),
     };
+}
+
+function buildArchitectureGraph(files: string[], patterns: string[], hasMl: boolean) {
+    const has = (value: string) => files.some((file) => file.includes(value));
+    const nodes: StackReport["architectureGraph"]["nodes"] = [{ id: "repository", label: "Repository", kind: "application" }];
+    const edges: StackReport["architectureGraph"]["edges"] = [];
+    const add = (id: string, label: string, kind: StackReport["architectureGraph"]["nodes"][number]["kind"], edgeLabel: string) => {
+        nodes.push({ id, label, kind }); edges.push({ from: "repository", to: id, label: edgeLabel });
+    };
+    if (has("src/") || has("app/") || has("apps/")) add("application", "Application layer", "application", "implements");
+    if (has("api/") || has("server/") || has("services/")) add("services", "Service/API layer", "service", "exposes");
+    if (has("prisma/") || has("migrations/") || has("database/") || has("models/")) add("data", "Data layer", "data", "persists to");
+    if (has(".github/workflows/") || patterns.includes("Continuous Integration")) add("delivery", "Delivery pipeline", "delivery", "validates");
+    if (hasMl || patterns.includes("Machine Learning")) add("ml", "ML capability", "ml", "operates");
+    return { nodes, edges };
 }

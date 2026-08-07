@@ -99,6 +99,8 @@ export const ReportCard = ({ data }: { data: StackReport }) => {
                         <ActionPanel data={data} />
                     </div>
 
+                    <ArchitectureMap data={data} />
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <CategoryBlock
                             title="Frameworks"
@@ -228,6 +230,11 @@ const ActionPanel = ({ data }: { data: StackReport }) => (
         </div>
     </div>
 );
+
+const ArchitectureMap = ({ data }: { data: StackReport }) => {
+    const colors: Record<string, string> = { application: "border-cyan-400/30 text-cyan-100", service: "border-emerald-400/30 text-emerald-100", data: "border-amber-400/30 text-amber-100", delivery: "border-blue-400/30 text-blue-100", ml: "border-violet-400/30 text-violet-100" };
+    return <div className="rounded-3xl border border-white/10 bg-slate-900/35 p-6"><div className="flex items-center gap-3"><GitBranch className="h-5 w-5 text-cyan-400" /><h2 className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-200">Architecture topology</h2></div><p className="mt-2 text-xs text-zinc-500">High-level components inferred from repository topology. Validate boundaries during technical review.</p><div className="mt-6 flex flex-wrap items-center gap-3">{data.architectureGraph.nodes.map((node, index) => <div className="flex items-center gap-3" key={node.id}>{index > 0 && <div className="h-px w-6 bg-white/20" />}<div className={`rounded-xl border bg-white/[0.025] px-4 py-3 text-xs font-semibold ${colors[node.kind]}`}><span className="block text-[9px] uppercase tracking-wider opacity-60">{node.kind}</span>{node.label}</div></div>)}</div></div>;
+};
 
 const ComplexityGauge = ({ score }: { score: number }) => {
     const isHigh = score > 70;
