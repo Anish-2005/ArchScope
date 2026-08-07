@@ -21,7 +21,7 @@ export async function POST(req: Request) {
         const repoRef = `${parsed.owner}/${parsed.repo}`;
         // Create cache key `archscope:{hash}`
         const hash = crypto.createHash('sha256').update(repoRef).digest('hex').substring(0, 16);
-        const cacheKey = `archscope:${hash}`;
+        const cacheKey = `archscope:v2:${hash}`;
 
         // 1. Check Redis cache
         try {

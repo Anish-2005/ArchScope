@@ -1,6 +1,7 @@
 import { DetectRule, StackReport } from './types';
 import { GitHubRepoData } from './github';
 import { calculateComplexity } from './complexity';
+import { buildIntelligence } from './intelligence';
 
 const RULES: DetectRule[] = [
     // Frontend
@@ -103,6 +104,7 @@ export function detectStack(repoData: GitHubRepoData, url: string): StackReport 
 
     const report = result as StackReport;
     report.complexityScore = calculateComplexity(report);
+    Object.assign(report, buildIntelligence(report, repoData));
 
     return report;
 }

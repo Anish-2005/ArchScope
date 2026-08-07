@@ -1,5 +1,5 @@
 import { StackReport } from "@/lib/types";
-import { Github, Star, Box, Server, Database, Cloud, Wrench, BarChart, ExternalLink, Activity, Link as LinkIcon, Check, ShieldAlert, Gauge, Layers, GitBranch } from "lucide-react";
+import { Github, Star, Box, Server, Database, Cloud, Wrench, BarChart, ExternalLink, Activity, Link as LinkIcon, Check, ShieldAlert, Gauge, Layers, GitBranch, BrainCircuit, ShieldCheck, ClipboardList, CircleAlert } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Logo } from "./Logo";
@@ -86,6 +86,17 @@ export const ReportCard = ({ data }: { data: StackReport }) => {
                                 <p className="text-zinc-400 leading-relaxed font-medium">{riskNote}</p>
                             </div>
                         </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <InsightKpi icon={<ShieldCheck className="w-4 h-4 text-emerald-400" />} label="Engineering health" value={`${data.healthScore}/100`} detail={`${data.deliveryRisk} delivery risk`} />
+                        <InsightKpi icon={<BrainCircuit className="w-4 h-4 text-violet-400" />} label="ML readiness" value={`${data.mlReadiness}/100`} detail="Data, model & delivery signals" />
+                        <InsightKpi icon={<Activity className="w-4 h-4 text-cyan-400" />} label="Repository signals" value={`${data.signals.fileCount}`} detail={`${data.signals.dependencyCount} dependencies · ${data.signals.workflowCount} workflows`} />
+                    </div>
+
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                        <IntelligencePanel data={data} />
+                        <ActionPanel data={data} />
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -190,6 +201,33 @@ const MiniKpi = ({ icon, label, value }: { icon: React.ReactNode; label: string;
         </div>
     );
 };
+
+const InsightKpi = ({ icon, label, value, detail }: { icon: React.ReactNode; label: string; value: string; detail: string }) => (
+    <div className="rounded-2xl border border-white/10 bg-zinc-950/35 p-5">
+        <div className="flex items-center gap-2 text-zinc-500 text-[10px] font-bold uppercase tracking-[0.16em]">{icon}{label}</div>
+        <p className="mt-3 text-2xl font-bold text-zinc-100">{value}</p>
+        <p className="mt-1 text-xs text-zinc-500">{detail}</p>
+    </div>
+);
+
+const IntelligencePanel = ({ data }: { data: StackReport }) => (
+    <div className="rounded-3xl border border-white/10 bg-slate-900/40 p-6">
+        <div className="flex items-center gap-3 mb-5"><CircleAlert className="w-5 h-5 text-amber-400" /><h2 className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-200">Risk intelligence</h2></div>
+        <div className="space-y-3">
+            {data.findings.slice(0, 4).map((finding) => <div key={finding.id} className="rounded-xl bg-white/[0.035] border border-white/5 p-3.5"><div className="flex justify-between gap-3"><p className="text-sm font-semibold text-zinc-200">{finding.title}</p><span className="text-[9px] uppercase tracking-wider text-amber-300">{finding.severity}</span></div><p className="mt-1 text-xs leading-relaxed text-zinc-500">{finding.detail}</p></div>)}
+        </div>
+        {data.signals.architecturePatterns.length > 0 && <div className="mt-5 flex flex-wrap gap-2">{data.signals.architecturePatterns.map((pattern) => <span key={pattern} className="rounded-full border border-cyan-400/15 bg-cyan-400/5 px-3 py-1 text-[10px] font-medium text-cyan-200">{pattern}</span>)}</div>}
+    </div>
+);
+
+const ActionPanel = ({ data }: { data: StackReport }) => (
+    <div className="rounded-3xl border border-white/10 bg-slate-900/40 p-6">
+        <div className="flex items-center gap-3 mb-5"><ClipboardList className="w-5 h-5 text-cyan-400" /><h2 className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-200">Recommended roadmap</h2></div>
+        <div className="space-y-3">
+            {data.recommendations.map((item) => <div key={item.title} className="flex gap-3 rounded-xl bg-white/[0.035] border border-white/5 p-3.5"><span className="mt-0.5 text-[9px] font-bold uppercase tracking-wider text-cyan-300">{item.priority}</span><div><p className="text-sm font-semibold text-zinc-200">{item.title}</p><p className="mt-1 text-xs leading-relaxed text-zinc-500">{item.detail}</p></div></div>)}
+        </div>
+    </div>
+);
 
 const ComplexityGauge = ({ score }: { score: number }) => {
     const isHigh = score > 70;
