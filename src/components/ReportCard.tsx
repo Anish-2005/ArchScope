@@ -1,8 +1,12 @@
 import { StackReport } from "@/lib/types";
-import { Github, Star, Box, Server, Database, Cloud, Wrench, BarChart, ExternalLink, Activity, Link as LinkIcon, Check, ShieldAlert, Gauge, Layers, GitBranch, BrainCircuit, ShieldCheck, ClipboardList, CircleAlert, Download, Printer } from "lucide-react";
+import { Github, Star, Box, Server, Database, Cloud, Wrench, BarChart, ExternalLink, Activity, Link as LinkIcon, Check, ShieldAlert, Gauge, Layers, GitBranch, BrainCircuit, ShieldCheck, ClipboardList, CircleAlert, Download, Printer, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Logo } from "./Logo";
+import { DependencyGraph } from "./DependencyGraph";
+import { TechDebtHeatmap } from "./TechDebtHeatmap";
+import { RiskTrendline } from "./RiskTrendline";
+import { exportToPdf, exportToCsv } from "@/lib/export";
 
 export const ReportCard = ({ data }: { data: StackReport }) => {
     const [copied, setCopied] = useState(false);
@@ -57,8 +61,10 @@ export const ReportCard = ({ data }: { data: StackReport }) => {
                                 {copied ? <Check className="h-3 w-3 text-emerald-400" /> : <LinkIcon className="h-3 w-3" />}
                                 {copied ? "Link Copied to Clipboard" : "Share Executive Brief"}
                             </button>
-                            <button onClick={exportJson} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] hover:bg-white/10 transition-all px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-300 hover:text-white"><Download className="h-3 w-3" /> Export JSON</button>
-                            <button onClick={() => window.print()} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] hover:bg-white/10 transition-all px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-300 hover:text-white"><Printer className="h-3 w-3" /> Print Brief</button>
+                            <button onClick={() => exportToPdf(data)} className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 hover:bg-cyan-400/20 text-cyan-300 transition-all px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em]"><FileText className="h-3 w-3" /> Export PDF</button>
+                            <button onClick={() => exportToCsv(data)} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] hover:bg-white/10 transition-all px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-300 hover:text-white"><Download className="h-3 w-3" /> CSV</button>
+                            <button onClick={exportJson} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] hover:bg-white/10 transition-all px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-300 hover:text-white"><Download className="h-3 w-3" /> JSON</button>
+                            <button onClick={() => window.print()} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] hover:bg-white/10 transition-all px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-300 hover:text-white"><Printer className="h-3 w-3" /> Print</button>
                         </div>
                         <h1 className="text-3xl sm:text-4xl lg:text-6xl font-extrabold text-zinc-50 flex flex-wrap items-center gap-3 leading-tight tracking-tight">
                             <Github className="w-10 h-10 lg:w-14 lg:h-14 text-cyan-400 shrink-0" />
@@ -112,7 +118,11 @@ export const ReportCard = ({ data }: { data: StackReport }) => {
                         <ActionPanel data={data} />
                     </div>
 
+                    <RiskTrendline repo={`${data.repo.owner}/${data.repo.name}`} />
+
                     <ArchitectureMap data={data} selectedKind={selectedKind} onSelectKind={setSelectedKind} />
+
+                    <TechDebtHeatmap findings={data.findings} />
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <CategoryBlock
@@ -310,6 +320,10 @@ const ArchitectureMap = ({ data, selectedKind, onSelectKind }: { data: StackRepo
             </div>
             <p className="text-xs text-zinc-400 mb-6">Inferred component node relationships derived from repository structure and manifest dependencies.</p>
             
+            <div className="mb-6">
+                <DependencyGraph graph={data.architectureGraph} selectedKind={selectedKind} />
+            </div>
+
             <div className="flex flex-wrap items-center gap-3">
                 {data.architectureGraph.nodes
                     .filter(node => selectedKind === null || node.kind === selectedKind)

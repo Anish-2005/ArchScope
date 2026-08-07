@@ -66,6 +66,15 @@ export const Navbar = () => {
               {pathname === '/portfolio' && <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-400 to-teal-400 rounded-full" />}
             </Link>
             <Link 
+              href="/executive" 
+              className={`relative py-1 text-[11px] sm:text-[12px] font-bold uppercase tracking-widest transition-all hidden sm:inline ${
+                pathname === '/executive' ? 'text-cyan-300 drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]' : 'text-zinc-400 hover:text-zinc-100'
+              }`}
+            >
+              Executive
+              {pathname === '/executive' && <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-400 to-teal-400 rounded-full" />}
+            </Link>
+            <Link 
               href="/governance" 
               className={`relative py-1 text-[11px] sm:text-[12px] font-bold uppercase tracking-widest transition-all hidden lg:inline ${
                 pathname === '/governance' ? 'text-cyan-300 drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]' : 'text-zinc-400 hover:text-zinc-100'
