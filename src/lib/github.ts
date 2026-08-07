@@ -14,6 +14,7 @@ export interface GitHubRepoData {
     languages: string[];
     files: string[];
     dependencies: Record<string, string>;
+    sourceSamples: Record<string, string>;
 }
 
 export class GitHubFetchError extends Error {
@@ -109,7 +110,7 @@ export async function fetchGitHubData(owner: string, repo: string): Promise<GitH
     const treeRes = await fetch(`${GITHUB_API}/repos/${owner}/${normalizedRepo}/git/trees/${defaultBranch}?recursive=1`, { headers });
     await ensureGitHubOk(treeRes, "Repository tree fetch failed");
     const treeData = await treeRes.json();
-    const files = treeData.tree ? treeData.tree.map((t: { path: string }) => t.path) : [];
+    const files: string[] = treeData.tree ? treeData.tree.map((t: { path: string }) => t.path) : [];
 
     // 4. Try fetching package.json or other dependency files if present
     const dependencies: Record<string, string> = {};
@@ -149,5 +150,21 @@ export async function fetchGitHubData(owner: string, repo: string): Promise<GitH
         }
     }
 
-    return { metadata, languages, files, dependencies };
+    // Sample a bounded set of source files for import-topology analysis. This avoids
+    // cloning repositories or retaining source while still enabling code-aware output.
+    const sourceCandidates = files.filter((file) => /\.(ts|tsx|js|jsx|py|go|java|cs)$/i.test(file) && !/(^|\/)(node_modules|dist|build|coverage|vendor)(\/|$)/.test(file)).slice(0, 48);
+    const sourceSamples: Record<string, string> = {};
+    await Promise.all(sourceCandidates.map(async (file) => {
+        try {
+            const response = await fetch(`https://raw.githubusercontent.com/${owner}/${normalizedRepo}/${defaultBranch}/${file}`);
+            if (response.ok) {
+                const text = await response.text();
+                if (text.length <= 180_000) sourceSamples[file] = text;
+            }
+        } catch {
+            // Source sampling is additive; a failed file must not fail the scan.
+        }
+    }));
+
+    return { metadata, languages, files, dependencies, sourceSamples };
 }
