@@ -1,29 +1,41 @@
 import { Logo } from './Logo';
+import { Search, Cpu, BarChart3 } from 'lucide-react';
 
 export default function GettingStarted() {
   return (
-    <div className="mx-auto w-full max-w-2xl mb-6">
-      <div 
-        onMouseMove={(e) => {
-          const rect = e.currentTarget.getBoundingClientRect();
-          e.currentTarget.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-          e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
-        }}
-        className="relative overflow-hidden flex items-start gap-5 p-6 rounded-[2rem] bg-slate-900/40 border border-white/10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] backdrop-blur-xl group transition-all duration-500 hover:border-cyan-500/30"
-      >
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(34,211,238,0.05),transparent_40%)] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        <div className="mt-1 flex-shrink-0">
-          <div className="p-2 rounded-xl bg-zinc-950/50 border border-white/5 shadow-inner group-hover:scale-110 transition-transform duration-500">
-            <Logo size={24} />
+    <div className="mx-auto w-full max-w-4xl mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="glass-card rounded-2xl p-4 flex items-center gap-3 text-left border border-white/10 hover:border-cyan-400/30 transition-all">
+          <div className="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0">
+            <Search className="w-4 h-4 text-cyan-300" />
+          </div>
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-cyan-400">Step 1</p>
+            <p className="text-xs font-semibold text-zinc-200">Input Repo URL</p>
           </div>
         </div>
-        <div className="flex-1 text-left">
-          <p className="text-[11px] font-bold text-cyan-400 uppercase tracking-[0.2em] mb-1">Quick start guide</p>
-          <p className="text-sm text-zinc-300 font-medium leading-relaxed">
-            Enter a GitHub repository URL or shorthand <span className="bg-white/5 px-1.5 py-0.5 rounded font-mono text-zinc-200">owner/repo</span> and launch the analyzer. Use samples below for an instant demonstration.
-          </p>
+
+        <div className="glass-card rounded-2xl p-4 flex items-center gap-3 text-left border border-white/10 hover:border-teal-400/30 transition-all">
+          <div className="w-9 h-9 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center shrink-0">
+            <Cpu className="w-4 h-4 text-teal-300" />
+          </div>
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-teal-400">Step 2</p>
+            <p className="text-xs font-semibold text-zinc-200">AST & Stack Detection</p>
+          </div>
+        </div>
+
+        <div className="glass-card rounded-2xl p-4 flex items-center gap-3 text-left border border-white/10 hover:border-indigo-400/30 transition-all">
+          <div className="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
+            <BarChart3 className="w-4 h-4 text-indigo-300" />
+          </div>
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-indigo-400">Step 3</p>
+            <p className="text-xs font-semibold text-zinc-200">Executive Brief & Map</p>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
