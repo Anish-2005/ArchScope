@@ -11,7 +11,7 @@ export const NavLink = ({ href, label, active, className }: NavLinkProps) => (
     <Link
         href={href}
         className={`relative py-1 text-[11px] sm:text-[12px] font-bold uppercase tracking-widest transition-all ${className} ${
-            active ? 'text-cyan-300 drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]' : 'text-zinc-400 hover:text-zinc-100'
+            active ? "text-cyan-300 drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]" : "text-zinc-400 hover:text-zinc-100"
         }`}
     >
         {label}
