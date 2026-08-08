@@ -63,7 +63,7 @@ export async function parseGitHubUrl(url: string): Promise<{ owner: string; repo
 }
 
 // ─── Manifest Parsers ───────────────────────────────────────────────────────────
-function parseRequirementsTxt(text: string): Record<string, string> {
+export function parseRequirementsTxt(text: string): Record<string, string> {
     const deps: Record<string, string> = {};
     text.split("\n").forEach((line) => {
         const trimmed = line.trim();
@@ -74,7 +74,7 @@ function parseRequirementsTxt(text: string): Record<string, string> {
     return deps;
 }
 
-function parseGoMod(text: string): Record<string, string> {
+export function parseGoMod(text: string): Record<string, string> {
     const deps: Record<string, string> = {};
     const requireBlock = /require\s*\(([\s\S]*?)\)/g;
     const singleRequire = /^require\s+(\S+)\s+(\S+)/gm;
@@ -90,7 +90,7 @@ function parseGoMod(text: string): Record<string, string> {
     return deps;
 }
 
-function parseCargoToml(text: string): Record<string, string> {
+export function parseCargoToml(text: string): Record<string, string> {
     const deps: Record<string, string> = {};
     const inDepsSection = /\[(?:dependencies|dev-dependencies|build-dependencies)\]([\s\S]*?)(?=\[|$)/g;
     let m;
@@ -113,7 +113,7 @@ function parsePomXml(files: string[]): Record<string, string> {
     return deps;
 }
 
-function parsePyprojectToml(text: string): Record<string, string> {
+export function parsePyprojectToml(text: string): Record<string, string> {
     const deps: Record<string, string> = {};
     const depSection = /\[(?:tool\.poetry\.dependencies|project\.dependencies)\]([\s\S]*?)(?=\[|$)/g;
     let m;
