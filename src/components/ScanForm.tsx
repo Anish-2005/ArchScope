@@ -5,6 +5,18 @@ import { useRouter } from 'next/navigation';
 import { Loader2, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Logo } from './Logo';
+import { ScanProgress } from './scan/ScanProgress';
+import { ErrorBanner } from './scan/ErrorBanner';
+import { BenchmarkLinks } from './scan/BenchmarkLinks';
+import { normalizeGithubInput, parseGithubUrl } from '@/lib/repo-url';
+
+const SCAN_STEP_MESSAGES = [
+    "Fetching repository metadata...",
+    "Parsing AST & manifest lockfiles...",
+    "Evaluating tech stack & dependencies...",
+    "Calculating complexity & health scores...",
+    "Finalizing architectural report...",
+];
 
 export const ScanForm = () => {
     const [url, setUrl] = useState('');
@@ -14,33 +26,18 @@ export const ScanForm = () => {
     const router = useRouter();
     const isActive = url.trim().length > 0;
 
-    const scanStepsMessages = [
-        "Fetching repository metadata...",
-        "Parsing AST & manifest lockfiles...",
-        "Evaluating tech stack & dependencies...",
-        "Calculating complexity & health scores...",
-        "Finalizing architectural report..."
-    ];
-
     const handleScan = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
 
-        let input = url.trim();
+        const input = url.trim();
         if (!input) {
             setError('Please enter a GitHub repository URL or owner/repo.');
             return;
         }
 
-        if (!input.includes('github.com/') && input.includes('/')) {
-            input = `https://github.com/${input.replace(/^\/+/, '')}`;
-        }
-
-        const match = input.match(/github\.com\/([^\/\s]+)\/([^\/\s]+?)(?:\.git)?(?:[\/\?#]|$)/i);
-        const owner = match?.[1];
-        const repo = match?.[2];
-
-        if (!input.includes('github.com/')) {
+        const normalized = normalizeGithubInput(input);
+        if (!normalized) {
             setError('Please enter a valid GitHub repository URL.');
             return;
         }
@@ -48,16 +45,15 @@ export const ScanForm = () => {
         setIsLoading(true);
         setScanStep(0);
 
-        // Step animation interval
         const stepInterval = setInterval(() => {
-            setScanStep((prev) => (prev < scanStepsMessages.length - 1 ? prev + 1 : prev));
+            setScanStep((prev) => (prev < SCAN_STEP_MESSAGES.length - 1 ? prev + 1 : prev));
         }, 1200);
 
         try {
             const res = await fetch('/api/scan', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ repoUrl: input }),
+                body: JSON.stringify({ repoUrl: normalized }),
             });
 
             const data = await res.json();
@@ -66,13 +62,13 @@ export const ScanForm = () => {
                 throw new Error(data.error || 'Failed to scan repository.');
             }
 
-            if (owner && repo) {
-                router.push(`/report/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`);
+            const parsed = parseGithubUrl(normalized);
+            if (parsed) {
+                router.push(`/report/${encodeURIComponent(parsed.owner)}/${encodeURIComponent(parsed.repo)}`);
             } else {
-                const encodedId = encodeURIComponent(btoa(input));
+                const encodedId = encodeURIComponent(btoa(normalized));
                 router.push(`/report/legacy/${encodedId}`);
             }
-
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'Failed to scan repository.');
         } finally {
@@ -87,8 +83,8 @@ export const ScanForm = () => {
             animate={{ opacity: 1, y: 0 }}
             className="w-full max-w-2xl mx-auto"
         >
-            <form 
-                onSubmit={handleScan} 
+            <form
+                onSubmit={handleScan}
                 className="relative group flex flex-col items-center justify-center"
                 onMouseMove={(e) => {
                     const rect = e.currentTarget.getBoundingClientRect();
@@ -96,9 +92,8 @@ export const ScanForm = () => {
                     e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
                 }}
             >
-                {/* Tactical Ambient Glow */}
                 <div className="absolute inset-0 rounded-3xl bg-[radial-gradient(circle_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(34,211,238,0.12),transparent_45%)] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
+
                 <div className={`absolute inset-0 rounded-3xl blur-2xl pointer-events-none transition-opacity duration-700 ${isActive ? 'opacity-100 bg-gradient-to-r from-cyan-500/25 via-teal-400/20 to-indigo-500/25' : 'opacity-40 bg-gradient-to-r from-cyan-500/10 via-sky-500/10 to-teal-500/10'} group-hover:opacity-100`} />
 
                 <div className={`relative flex w-full flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 rounded-2xl p-2.5 transition-all backdrop-blur-2xl ${isActive ? 'bg-slate-950/90 border border-cyan-400/40 ring-1 ring-cyan-400/20 shadow-[0_0_40px_rgba(34,211,238,0.2)]' : 'bg-slate-950/70 border border-white/12 shadow-2xl'}`}>
@@ -137,49 +132,13 @@ export const ScanForm = () => {
                 </div>
             </form>
 
-            {/* Live Progress Bar during loading */}
             {isLoading && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 backdrop-blur-xl">
-                    <div className="flex items-center justify-between text-[11px] font-mono text-cyan-300 mb-2">
-                        <span className="flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-                            {scanStepsMessages[scanStep]}
-                        </span>
-                        <span className="font-bold">{Math.round(((scanStep + 1) / scanStepsMessages.length) * 100)}%</span>
-                    </div>
-                    <div className="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
-                        <motion.div 
-                            className="h-full bg-gradient-to-r from-cyan-400 to-teal-400 rounded-full"
-                            initial={{ width: "10%" }}
-                            animate={{ width: `${((scanStep + 1) / scanStepsMessages.length) * 100}%` }}
-                            transition={{ duration: 0.5 }}
-                        />
-                    </div>
-                </motion.div>
+                <ScanProgress step={scanStep} stepCount={SCAN_STEP_MESSAGES.length} message={SCAN_STEP_MESSAGES[scanStep]} />
             )}
 
-            {error && (
-                <motion.div
-                    initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-                    className="mt-6 flex items-center justify-center gap-2 text-rose-400 text-xs font-bold uppercase tracking-widest bg-rose-500/10 py-2.5 px-4 rounded-full border border-rose-500/20 shadow-lg"
-                >
-                    <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
-                    {error}
-                </motion.div>
-            )}
+            {error && <ErrorBanner message={error} />}
 
-            <div className="mt-8 flex flex-wrap justify-center items-center gap-2.5 text-sm text-zinc-500 font-medium">
-                <span className="text-zinc-500 text-[10px] uppercase font-bold tracking-[0.2em] w-full text-center mb-1">Featured Architecture Benchmarks</span>
-                <button onClick={() => setUrl('https://github.com/vercel/next.js')} className="hover:text-cyan-300 hover:border-cyan-400/40 transition-all bg-white/[0.04] hover:bg-white/[0.08] px-4 py-1.5 rounded-full border border-white/10 font-mono text-[11px] shadow-lg flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" /> next.js
-                </button>
-                <button onClick={() => setUrl('https://github.com/facebook/react')} className="hover:text-cyan-300 hover:border-cyan-400/40 transition-all bg-white/[0.04] hover:bg-white/[0.08] px-4 py-1.5 rounded-full border border-white/10 font-mono text-[11px] shadow-lg flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-teal-400" /> react
-                </button>
-                <button onClick={() => setUrl('https://github.com/tailwindlabs/tailwindcss')} className="hover:text-cyan-300 hover:border-cyan-400/40 transition-all bg-white/[0.04] hover:bg-white/[0.08] px-4 py-1.5 rounded-full border border-white/10 font-mono text-[11px] shadow-lg flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-sky-400" /> tailwind
-                </button>
-            </div>
+            <BenchmarkLinks onSelect={setUrl} />
         </motion.div>
     );
 };
