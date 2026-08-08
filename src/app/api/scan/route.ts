@@ -4,6 +4,7 @@ import { detectStack } from '@/lib/detector';
 import { getCache, setCache, getPolicy, saveScan, checkRateLimit } from '@/lib/redis';
 import { getSessionFromRequest } from '@/lib/auth';
 import { log, withTiming } from '@/lib/observability';
+import { evaluatePolicy, violationIsBudget } from '@/lib/policy';
 import crypto from 'crypto';
 import { StackReport } from '@/lib/types';
 
@@ -80,25 +81,18 @@ export async function POST(req: Request) {
 
         // 4. Policy evaluation
         const policy = await getPolicy(organization);
-        if (policy.requireCi && report.signals.workflowCount === 0) {
+        const violations = evaluatePolicy(report, policy);
+
+        for (const violation of violations.filter((v) => !violationIsBudget(v))) {
             report.findings.unshift({
-                id: "policy-ci",
-                severity: "high",
-                category: "delivery",
-                title: "Policy breach: CI required",
-                detail: `The ${organization} baseline requires an automated CI workflow (GitHub Actions, GitLab CI, or CircleCI).`
+                id: `policy-${violation.code}`,
+                severity: violation.severity,
+                category: violation.category,
+                title: violation.code === "ci" ? "Policy breach: CI required" : "Policy breach: test evidence required",
+                detail: violation.detail,
             });
         }
-        if (policy.requireTestEvidence && report.signals.testSignals === 0) {
-            report.findings.unshift({
-                id: "policy-tests",
-                severity: "high",
-                category: "delivery",
-                title: "Policy breach: test evidence required",
-                detail: `The ${organization} baseline requires detectable test coverage conventions.`
-            });
-        }
-        if (report.signals.dependencyCount > policy.maxDependencies || report.complexityScore > policy.maxComplexity) {
+        if (violations.some(violationIsBudget)) {
             report.findings.unshift({
                 id: "policy-budget",
                 severity: "medium",

@@ -3,8 +3,16 @@ import { parseRepoUrl, fetchRepoData, GitHubFetchError } from "@/lib/vcs";
 import { detectStack } from "@/lib/detector";
 import { getPolicy, saveScan, listScansByRepo, checkRateLimit } from "@/lib/redis";
 import { log } from "@/lib/observability";
+import { evaluatePolicy, PolicyViolationCode } from "@/lib/policy";
 import crypto from "crypto";
-import { StackReport } from "@/lib/types";
+import { ArchitecturePolicy, StackReport } from "@/lib/types";
+
+const VIOLATION_MESSAGES: Record<PolicyViolationCode, (report: StackReport, policy: ArchitecturePolicy) => string> = {
+    ci: () => "No CI workflow detected (policy requires automated CI)",
+    tests: () => "No test evidence detected (policy requires test coverage)",
+    dependencies: (r, p) => `Dependency count ${r.signals.dependencyCount} exceeds budget of ${p.maxDependencies}`,
+    complexity: (r, p) => `Complexity score ${r.complexityScore} exceeds budget of ${p.maxComplexity}`,
+};
 
 export interface CIResult {
     pass: boolean;
@@ -52,20 +60,7 @@ export async function POST(req: Request) {
 
         // Policy evaluation
         const policy = await getPolicy(org);
-        const violations: string[] = [];
-
-        if (policy.requireCi && report.signals.workflowCount === 0) {
-            violations.push("No CI workflow detected (policy requires automated CI)");
-        }
-        if (policy.requireTestEvidence && report.signals.testSignals === 0) {
-            violations.push("No test evidence detected (policy requires test coverage)");
-        }
-        if (report.signals.dependencyCount > policy.maxDependencies) {
-            violations.push(`Dependency count ${report.signals.dependencyCount} exceeds budget of ${policy.maxDependencies}`);
-        }
-        if (report.complexityScore > policy.maxComplexity) {
-            violations.push(`Complexity score ${report.complexityScore} exceeds budget of ${policy.maxComplexity}`);
-        }
+        const violations: string[] = evaluatePolicy(report, policy).map((v) => VIOLATION_MESSAGES[v.code](report, policy));
 
         const criticalFindings = report.findings.filter((f) => f.severity === "critical" || f.severity === "high").length;
         const pass = !failOnPolicy || violations.length === 0;

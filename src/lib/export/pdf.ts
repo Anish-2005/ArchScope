@@ -1,29 +1,7 @@
-import { StackReport } from "./types";
+import { StackReport } from "../types";
 import { jsPDF } from "jspdf";
 
-export function exportToCsv(data: StackReport): void {
-    const rows = [
-        ["Section", "Item / Title", "Category / Detail", "Severity / Priority"],
-        ...data.languages.map((l) => ["Language", l, "-", "-"]),
-        ...data.frameworks.map((f) => ["Framework", f, "-", "-"]),
-        ...data.frontend.map((f) => ["Frontend", f, "-", "-"]),
-        ...data.backend.map((b) => ["Backend", b, "-", "-"]),
-        ...data.database.map((d) => ["Database", d, "-", "-"]),
-        ...data.infrastructure.map((i) => ["Infrastructure", i, "-", "-"]),
-        ...data.devtools.map((d) => ["DevTools", d, "-", "-"]),
-        ...data.findings.map((f) => ["Finding", f.title, f.detail, f.severity]),
-        ...data.recommendations.map((r) => ["Recommendation", r.title, r.detail, r.priority]),
-    ];
-
-    const csvContent = "data:text/csv;charset=utf-8," + rows.map((e) => e.map((cell) => `"${cell.replace(/"/g, '""')}"`).join(",")).join("\n");
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `archscope-${data.repo.owner}-${data.repo.name}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
+const METRICS_BOX = { x: 20, y: 48, w: 170, h: 28 };
 
 export function exportToPdf(data: StackReport): void {
     const doc = new jsPDF();
@@ -45,7 +23,7 @@ export function exportToPdf(data: StackReport): void {
     // Executive Metrics Box
     doc.setDrawColor(200, 200, 200);
     doc.setFillColor(245, 247, 250);
-    doc.roundedRect(20, 48, 170, 28, 3, 3, "FD");
+    doc.roundedRect(METRICS_BOX.x, METRICS_BOX.y, METRICS_BOX.w, METRICS_BOX.h, 3, 3, "FD");
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
@@ -81,7 +59,7 @@ export function exportToPdf(data: StackReport): void {
     doc.setFontSize(9);
     data.findings.slice(0, 5).forEach((f) => {
         doc.setFont("helvetica", "bold");
-        doc.text(`• [${f.severity.toUpperCase()}] ${f.title}`, 20, y);
+        doc.text(`\u2022 [${f.severity.toUpperCase()}] ${f.title}`, 20, y);
         y += 5;
         doc.setFont("helvetica", "normal");
         const lines = doc.splitTextToSize(f.detail, 165);
@@ -104,7 +82,7 @@ export function exportToPdf(data: StackReport): void {
     doc.setFontSize(9);
     data.recommendations.forEach((r) => {
         doc.setFont("helvetica", "bold");
-        doc.text(`• [${r.priority.toUpperCase()}] ${r.title}`, 20, y);
+        doc.text(`\u2022 [${r.priority.toUpperCase()}] ${r.title}`, 20, y);
         y += 5;
         doc.setFont("helvetica", "normal");
         const lines = doc.splitTextToSize(r.detail, 165);
