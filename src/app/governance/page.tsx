@@ -1,10 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CheckCircle2, Loader2, ShieldCheck, Sliders, Check, AlertCircle } from "lucide-react";
+import { CheckCircle2, Loader2, ShieldCheck, Check } from "lucide-react";
 import { ArchitecturePolicy } from "@/lib/types";
+import { StrictnessScoreCard } from "@/components/governance/StrictnessScoreCard";
+import { Toggle } from "@/components/governance/Toggle";
+import { NumberField } from "@/components/governance/NumberField";
 
 const initial: ArchitecturePolicy = { organization: "personal", requireCi: true, requireTestEvidence: true, maxDependencies: 80, maxComplexity: 70 };
+
+const calculateStrictness = (policy: ArchitecturePolicy): number =>
+    Math.round(
+        (policy.requireCi ? 25 : 0) +
+        (policy.requireTestEvidence ? 25 : 0) +
+        (Math.max(0, 100 - policy.maxDependencies) * 0.25) +
+        (Math.max(0, 100 - policy.maxComplexity) * 0.25)
+    );
 
 export default function GovernancePage() {
     const [policy, setPolicy] = useState<ArchitecturePolicy>(initial);
@@ -41,13 +52,8 @@ export default function GovernancePage() {
         }
     };
 
-    // Calculate Policy Strictness score
-    const strictnessScore = Math.round(
-        (policy.requireCi ? 25 : 0) +
-        (policy.requireTestEvidence ? 25 : 0) +
-        (Math.max(0, 100 - policy.maxDependencies) * 0.25) +
-        (Math.max(0, 100 - policy.maxComplexity) * 0.25)
-    );
+    const update = <K extends keyof ArchitecturePolicy>(key: K, value: ArchitecturePolicy[K]) =>
+        setPolicy((prev) => ({ ...prev, [key]: value }));
 
     return (
         <div className="mx-auto w-full max-w-4xl px-5 py-12 sm:px-8 lg:py-16">
@@ -62,13 +68,7 @@ export default function GovernancePage() {
                     </p>
                 </div>
 
-                <div className="glass-card rounded-2xl p-4 flex items-center gap-4 border border-white/10 shrink-0">
-                    <Sliders className="w-6 h-6 text-cyan-400" />
-                    <div>
-                        <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Strictness Score</p>
-                        <p className="text-xl font-extrabold font-mono text-cyan-300">{strictnessScore} / 100</p>
-                    </div>
-                </div>
+                <StrictnessScoreCard score={calculateStrictness(policy)} />
             </div>
 
             <div className="space-y-6 rounded-3xl border border-white/10 glass-panel p-6 sm:p-10 shadow-2xl backdrop-blur-2xl">
@@ -88,14 +88,14 @@ export default function GovernancePage() {
                         label="Require Continuous Integration (CI)"
                         description="Flag repositories without detectable GitHub Actions CI workflow triggers."
                         checked={policy.requireCi}
-                        onChange={(requireCi) => setPolicy({ ...policy, requireCi })}
+                        onChange={(requireCi) => update("requireCi", requireCi)}
                     />
 
                     <Toggle
                         label="Require Automated Test Evidence"
                         description="Flag repositories lacking test paths, jest/vitest/pytest markers, or spec files."
                         checked={policy.requireTestEvidence}
-                        onChange={(requireTestEvidence) => setPolicy({ ...policy, requireTestEvidence })}
+                        onChange={(requireTestEvidence) => update("requireTestEvidence", requireTestEvidence)}
                     />
                 </div>
 
@@ -104,7 +104,7 @@ export default function GovernancePage() {
                         label="Dependency Budget Ceiling"
                         value={policy.maxDependencies}
                         max={500}
-                        onChange={(maxDependencies) => setPolicy({ ...policy, maxDependencies })}
+                        onChange={(maxDependencies) => update("maxDependencies", maxDependencies)}
                         helpText="Repositories exceeding this count trigger high dependency debt alerts."
                     />
 
@@ -112,7 +112,7 @@ export default function GovernancePage() {
                         label="Complexity Score Budget"
                         value={policy.maxComplexity}
                         max={100}
-                        onChange={(maxComplexity) => setPolicy({ ...policy, maxComplexity })}
+                        onChange={(maxComplexity) => update("maxComplexity", maxComplexity)}
                         helpText="Maximum complexity score before triggering architecture review warnings."
                     />
                 </div>
@@ -137,44 +137,3 @@ export default function GovernancePage() {
         </div>
     );
 }
-
-function Toggle({ label, description, checked, onChange }: { label: string; description: string; checked: boolean; onChange: (value: boolean) => void }) {
-    return (
-        <label className="flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] p-5 transition-all">
-            <div>
-                <span className="block text-sm font-semibold text-zinc-100">{label}</span>
-                <span className="mt-1 block text-xs text-zinc-400 font-medium">{description}</span>
-            </div>
-            <div className="relative inline-flex items-center shrink-0">
-                <input
-                    type="checkbox"
-                    checked={checked}
-                    onChange={(event) => onChange(event.target.checked)}
-                    className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-slate-950 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-zinc-200 after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-400 peer-checked:after:bg-slate-950 border border-white/10"></div>
-            </div>
-        </label>
-    );
-}
-
-function NumberField({ label, value, max, onChange, helpText }: { label: string; value: number; max: number; onChange: (value: number) => void; helpText: string }) {
-    return (
-        <div className="glass-card rounded-2xl p-5 border border-white/10">
-            <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-zinc-300">{label}</span>
-                <span className="text-sm font-extrabold font-mono text-cyan-300">{value}</span>
-            </div>
-            <input
-                type="range"
-                min="10"
-                max={max}
-                value={value}
-                onChange={(event) => onChange(Number(event.target.value))}
-                className="w-full accent-cyan-400 cursor-pointer h-1.5 bg-slate-950 rounded-lg"
-            />
-            <p className="mt-2 text-[11px] text-zinc-400">{helpText}</p>
-        </div>
-    );
-}
-
