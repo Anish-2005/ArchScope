@@ -33,7 +33,7 @@ describe("detectStack", () => {
         );
 
         expect(report.backend).toContain("FastAPI");
-        expect(report.database).toContain("SQLAlchemy");
+        expect(report.backend).toContain("SQLAlchemy");
         expect(report.infrastructure).toContain("Docker");
         expect(report.infrastructure).toContain("GitHub Actions");
     });
@@ -62,7 +62,7 @@ describe("detectStack", () => {
 
     it("returns an empty-but-valid report for a bare repository", () => {
         const report = detectStack(
-            makeRepoData({ files: ["hello.txt"] }),
+            makeRepoData({ languages: [], files: ["hello.txt"] }),
             "https://github.com/acme/bare"
         );
 
@@ -79,7 +79,7 @@ describe("detectStack", () => {
         const report = detectStack(
             makeRepoData({
                 languages: ["TypeScript", "Python", "terraform"],
-                dependencies: { openai: "*", "@libsql/client": "*", "hono": "*" },
+                dependencies: { openai: "*", "@libsql/client": "*", "hono": "*", "cypress": "13" },
                 files: [
                     "src/index.ts",
                     "workers/wrangler.toml",

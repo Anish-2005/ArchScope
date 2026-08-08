@@ -4,18 +4,18 @@ import { baseReport } from "./test-utils";
 
 describe("calculateComplexity", () => {
     it("returns 0 for an empty stack", () => {
-        expect(calculateComplexity(baseReport())).toBe(0);
+        expect(calculateComplexity(baseReport({ languages: [] }))).toBe(0);
     });
 
     it("weights backend heavier than frontend", () => {
-        const withBackend = calculateComplexity(baseReport({ backend: ["Express", "Fastify"], frontend: [] }));
-        const withFrontend = calculateComplexity(baseReport({ frontend: ["React", "Vue"], backend: [] }));
+        const withBackend = calculateComplexity(baseReport({ languages: [], backend: ["Express", "Fastify"], frontend: [] }));
+        const withFrontend = calculateComplexity(baseReport({ languages: [], frontend: ["React", "Vue"], backend: [] }));
         expect(withBackend).toBe(12);
         expect(withFrontend).toBe(10);
     });
 
     it("weights database and infrastructure heaviest", () => {
-        const report = baseReport({ database: ["Redis"], infrastructure: ["Docker"] });
+        const report = baseReport({ languages: [], database: ["Redis"], infrastructure: ["Docker"] });
         expect(calculateComplexity(report)).toBe(18);
     });
 

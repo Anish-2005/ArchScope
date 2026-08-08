@@ -33,10 +33,16 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Lint
         run: npm run lint --silent
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test --silent
 
       - name: Build
         run: npm run build
