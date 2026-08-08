@@ -160,7 +160,7 @@ async function fetchGitHub(owner: string, repo: string, token?: string): Promise
         if (res.ok) return;
         const remaining = res.headers.get("x-ratelimit-remaining");
         const reset = res.headers.get("x-ratelimit-reset");
-        let msg = res.status === 404
+        const msg = res.status === 404
             ? `Repository not found: ${owner}/${repo}`
             : res.status === 403
                 ? `GitHub API rate limit reached${remaining === "0" && reset ? ` (resets at ${new Date(Number(reset) * 1000).toLocaleString()})` : ""}`

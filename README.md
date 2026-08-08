@@ -326,6 +326,14 @@ npm run build   # Verified: exit code 0  ✓
 npm run start
 ```
 
+### 5. Quality Gates
+
+```bash
+npm run lint       # ESLint
+npm run typecheck  # tsc --noEmit
+npm test           # Vitest (detector · intelligence · complexity · VCS adapters)
+```
+
 ---
 
 ## 🔌 API Reference

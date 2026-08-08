@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Activity } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -21,14 +21,23 @@ export const RiskTrendline = ({ repo, org = "personal" }: { repo: string; org?: 
             .finally(() => setLoading(false));
     }, [repo, org]);
 
+    // If we don't have at least 2 points to draw a trend, mock it slightly (deterministically
+    // per repo) to show the capability
+    const points = useMemo(() => {
+        if (data.length > 1) return data;
+        const seed = [...`${repo}:${org}`].reduce((acc, c) => acc + c.charCodeAt(0), 0);
+        const noise = (i: number) => {
+            const x = Math.sin(seed * 7 + i * 13) * 10000;
+            return x - Math.floor(x);
+        };
+        return Array.from({ length: 10 }).map((_, i) => ({
+            date: new Date(Date.UTC(2026, 0, 1) + (i - 9) * 86400000).toISOString(),
+            health: data[0]?.health || Math.round(83 + noise(i) * 10),
+            complexity: data[0]?.complexity || Math.round(42 + noise(i + 0.5) * 10),
+        }));
+    }, [data, org, repo]);
+
     if (loading) return <div className="h-40 animate-pulse bg-slate-900/50 rounded-2xl" />;
-    
-    // If we don't have at least 2 points to draw a trend, mock it slightly to show the capability
-    const points = data.length > 1 ? data : Array.from({ length: 10 }).map((_, i) => ({
-        date: new Date(Date.now() - (9 - i) * 86400000).toISOString(),
-        health: data[0]?.health || 85 + (Math.random() * 10 - 5),
-        complexity: data[0]?.complexity || 40 + (Math.random() * 10 - 5)
-    }));
 
     const w = 400;
     const h = 120;
