@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Terminal, Shield, ArrowLeft, Copy, Check } from "lucide-react";
+import { Terminal, ArrowLeft } from "lucide-react";
 
 export default function CliDocsPage() {
     return (

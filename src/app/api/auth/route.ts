@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSessionFromRequest, signSession, COOKIE_OPTIONS, SESSION_COOKIE, OrgRole } from "@/lib/auth";
-import { getOrgMembers, saveOrgMember } from "@/lib/redis";
+import { getOrgMembers } from "@/lib/redis";
 
 const DEFAULT_ORG_PASSCODES: Record<string, { password: string; role: OrgRole }[]> = {
     personal: [{ password: "personal", role: "owner" }],

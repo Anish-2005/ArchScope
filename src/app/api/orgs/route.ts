@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSessionFromRequest, requireRole } from "@/lib/auth";
-import { listOrgs, saveOrg, getOrgMembers, saveOrgMember, OrgRecord, OrgMember } from "@/lib/redis";
+import { listOrgs, saveOrg, saveOrgMember, OrgRecord, OrgMember } from "@/lib/redis";
 import crypto from "crypto";
 
 export async function GET(req: Request) {

@@ -1,58 +1,13 @@
 import { NextResponse } from "next/server";
-import { parseRepoUrl, fetchRepoData, GitHubFetchError } from "@/lib/vcs";
+import { parseRepoUrl, fetchRepoData } from "@/lib/vcs";
 import { detectStack } from "@/lib/detector";
 import { getPolicy, saveScan, logWebhookEvent } from "@/lib/redis";
+import { evaluatePolicy } from "@/lib/policy";
+import { verifyGithubSignature, buildPrComment } from "@/lib/webhooks";
 import { log } from "@/lib/observability";
 import crypto from "crypto";
 
 const GITHUB_WEBHOOK_SECRET = process.env.GITHUB_WEBHOOK_SECRET || "";
-
-function verifyGitHubSignature(payload: string, signature: string | null): boolean {
-    if (!signature || !GITHUB_WEBHOOK_SECRET) return !GITHUB_WEBHOOK_SECRET; // pass-through if no secret set
-    const expected = `sha256=${crypto.createHmac("sha256", GITHUB_WEBHOOK_SECRET).update(payload).digest("hex")}`;
-    try {
-        return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
-    } catch {
-        return false;
-    }
-}
-
-function buildPrComment(result: {
-    repo: string;
-    healthScore: number;
-    complexityScore: number;
-    deliveryRisk: string;
-    violations: string[];
-    criticalFindings: number;
-    reportUrl: string;
-    pass: boolean;
-}): string {
-    const statusEmoji = result.pass ? "✅" : "❌";
-    const riskEmoji = result.deliveryRisk === "high" ? "🔴" : result.deliveryRisk === "medium" ? "🟡" : "🟢";
-    const violationsList = result.violations.length
-        ? result.violations.map((v) => `- ⚠️ ${v}`).join("\n")
-        : "- ✅ All policy checks passed";
-
-    return `## ${statusEmoji} ArchScope Architecture Analysis
-
-**Repository:** \`${result.repo}\` | **Delivery Risk:** ${riskEmoji} ${result.deliveryRisk.toUpperCase()}
-
-| Metric | Score |
-|--------|-------|
-| 🏥 Health Score | **${result.healthScore}/100** |
-| 🔧 Complexity Score | **${result.complexityScore}/100** |
-| 🚨 Critical Findings | **${result.criticalFindings}** |
-
-### Policy Evaluation
-${violationsList}
-
-${result.violations.length > 0 ? "**This PR has policy violations. Please review the findings before merging.**" : "**All policy checks passed. Architecture is within defined guardrails.**"}
-
-📊 [View Full Architecture Report](${result.reportUrl})
-
----
-*Powered by [ArchScope](https://archscope.dev) — Engineering Intelligence Platform*`;
-}
 
 export async function POST(req: Request) {
     const rawBody = await req.text();
@@ -60,7 +15,7 @@ export async function POST(req: Request) {
     const event = req.headers.get("x-github-event");
 
     // Verify webhook signature
-    if (!verifyGitHubSignature(rawBody, signature)) {
+    if (!verifyGithubSignature(rawBody, signature, GITHUB_WEBHOOK_SECRET)) {
         log.warn("GitHub webhook signature verification failed");
         return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
@@ -114,10 +69,15 @@ export async function POST(req: Request) {
 
         const org = (repository?.owner as Record<string, unknown>)?.login as string || "personal";
         const policy = await getPolicy(org);
-        const violations: string[] = [];
-        if (policy.requireCi && report.signals.workflowCount === 0) violations.push("No CI workflow detected");
-        if (policy.requireTestEvidence && report.signals.testSignals === 0) violations.push("No test evidence detected");
-        if (report.signals.dependencyCount > policy.maxDependencies) violations.push(`Dependency count exceeds budget of ${policy.maxDependencies}`);
+        const violations: string[] = evaluatePolicy(report, policy)
+            .filter((v) => v.code !== "complexity")
+            .map((v) =>
+                v.code === "ci"
+                    ? "No CI workflow detected"
+                    : v.code === "tests"
+                        ? "No test evidence detected"
+                        : `Dependency count exceeds budget of ${policy.maxDependencies}`
+            );
 
         await saveScan({ id: report.scanId!, organization: org, repository: repoFullName, scannedAt: report.scannedAt!, report });
 

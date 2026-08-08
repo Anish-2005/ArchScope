@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getScanJob, updateScanJob, saveScan, getPolicy } from "@/lib/redis";
+import { updateScanJob, saveScan, getPolicy } from "@/lib/redis";
 import { parseRepoUrl, fetchRepoData } from "@/lib/vcs";
 import { detectStack } from "@/lib/detector";
 import { log } from "@/lib/observability";

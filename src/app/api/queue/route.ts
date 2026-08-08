@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { enqueueScanJob, getScanJob, updateScanJob } from "@/lib/redis";
+import { enqueueScanJob, getScanJob } from "@/lib/redis";
 import { getSessionFromRequest } from "@/lib/auth";
 import crypto from "crypto";
 

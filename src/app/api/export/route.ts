@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { getScanJob } from "@/lib/redis"; // Using as fallback lookup if needed
 // A real app would look up by scanId directly in Redis, but we use history API for now
 
 export async function GET(req: Request) {

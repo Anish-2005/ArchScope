@@ -11,7 +11,7 @@ import { StackReport } from '@/lib/types';
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { repoUrl, organization: requestedOrganization, token, platform } = body;
+        const { repoUrl, organization: requestedOrganization, token } = body;
 
         // Determine org from session cookie first, then body param
         const nextReq = req as unknown as import("next/server").NextRequest;

@@ -1,4 +1,3 @@
-import { Logo } from './Logo';
 import { Search, Cpu, BarChart3 } from 'lucide-react';
 
 export default function GettingStarted() {
