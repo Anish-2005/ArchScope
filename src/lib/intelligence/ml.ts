@@ -1,0 +1,15 @@
+export const ML_PACKAGES = [
+    "tensorflow",
+    "@tensorflow/tfjs",
+    "torch",
+    "pytorch",
+    "scikit-learn",
+    "sklearn",
+    "transformers",
+    "langchain",
+    "openai",
+    "@google/generative-ai",
+    "mlflow",
+    "pandas",
+    "numpy",
+];
