@@ -1,7 +1,7 @@
 interface TerminalLine {
     comment?: string;
-    command?: string;
-    prompt?: string;
+    command?: React.ReactNode;
+    prompt?: boolean;
 }
 
 interface CodeTerminalProps {
@@ -20,9 +20,9 @@ export const CodeTerminal = ({ lines }: CodeTerminalProps) => (
                 <div key={i} className="space-y-1">
                     {line.comment && <p className="text-zinc-500 text-xs italic">{line.comment}</p>}
                     {line.command && (
-                        <p className="text-cyan-400">
-                            {line.prompt && <span className="text-emerald-400">$ </span>}
-                            {line.command}
+                        <p className="text-zinc-100 flex gap-2">
+                            {line.prompt && <span className="text-emerald-400">$</span>}
+                            <span>{line.command}</span>
                         </p>
                     )}
                 </div>
