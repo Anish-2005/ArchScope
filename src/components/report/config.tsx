@@ -43,7 +43,7 @@ export const DIAL_COLORS: Record<string, { ring: string; text: string; glow: str
 };
 
 // ─── Stack Sections ─────────────────────────────────────────────────────────
-type StackSectionKey = "languages" | "frameworks" | "frontend" | "backend" | "database" | "infrastructure" | "devtools";
+export type StackSectionKey = "languages" | "frameworks" | "frontend" | "backend" | "database" | "infrastructure" | "devtools";
 
 export const STACK_SECTIONS: { key: StackSectionKey; label: string; icon: React.ReactNode; accent: string }[] = [
     { key: "languages",       label: "Languages",        icon: <Code2 className="h-4 w-4 text-cyan-400" />,       accent: "cyan"    },
